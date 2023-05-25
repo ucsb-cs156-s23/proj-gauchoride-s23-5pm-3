@@ -31,4 +31,5 @@ public class User {
   private boolean admin;
   @Builder.Default
   private boolean driver=false;
+  
 }

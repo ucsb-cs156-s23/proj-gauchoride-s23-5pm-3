@@ -234,6 +234,41 @@ public class UsersControllerTests extends ControllerTestCase {
 
   @WithMockUser(roles = { "ADMIN", "USER" })
   @Test
+  public void admin_can_toggle_driver_status_of_a_user_from_false_to_true() throws Exception {
+          // arrange
+          User userBefore = User.builder()
+          .email("cgaucho@ucsb.edu")
+          .id(15L)
+          .admin(true)
+          .driver(false)
+          .build();
+
+          User userAfter = User.builder()
+          .email("cgaucho@ucsb.edu")
+          .id(15L)
+          .admin(true)
+          .driver(true)
+          .build();
+
+    
+          when(userRepository.findById(eq(15L))).thenReturn(Optional.of(userBefore));
+          when(userRepository.save(eq(userAfter))).thenReturn(userAfter);
+          // act
+          MvcResult response = mockMvc.perform(
+                          post("/api/admin/users/toggleDriver?id=15")
+                                          .with(csrf()))
+                          .andExpect(status().isOk()).andReturn();
+
+          // assert
+          verify(userRepository, times(1)).findById(15L);
+          verify(userRepository, times(1)).save(userAfter);
+
+          Map<String, Object> json = responseToJson(response);
+          assertEquals("User with id 15 has toggled driver status", json.get("message"));
+  }
+
+  @WithMockUser(roles = { "ADMIN", "USER" })
+  @Test
   public void admin_tries_to_toggle_non_existant_user_and_gets_right_error_message() throws Exception {
           // arrange
         

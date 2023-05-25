@@ -1,8 +1,5 @@
-
 import OurTable, { ButtonColumn } from "main/components/OurTable"
 import { useBackendMutation } from "main/utils/useBackend";
-import { Button } from "react-bootstrap/lib/InputGroup";
-
 
 
 export default function UsersTable({ users}) {
@@ -91,3 +88,4 @@ export default function UsersTable({ users}) {
         testid={"UsersTable"}
     />;
 };
+

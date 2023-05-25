@@ -1,6 +1,7 @@
 
 import OurTable, { ButtonColumn } from "main/components/OurTable"
 import { useBackendMutation } from "main/utils/useBackend";
+import { Button } from "react-bootstrap/lib/InputGroup";
 
 
 
@@ -16,16 +17,35 @@ export default function UsersTable({ users}) {
         }
     }
 
+    function cellToAxiosParamsToggleDriver(cell){
+        return {
+            url: "/api/driver/users/toggleDriver", // going to have to add api/driver
+            method:  "POST",
+            params: {
+                id: cell.row.values.id
+            }
+        }
+    }
+
     // Stryker disable all : hard to test for query caching
     const toggleAdminMutation = useBackendMutation(
         cellToAxiosParamsToggleAdmin,
         {},
         ["/api/admin/users"]
     );
+
+    const toggleDriverMutation = useBackendMutation(
+        cellToAxiosParamsToggleDriver,
+        {},
+        ["/api/driver/users"] // going to have to add this
+
+    );
+
     // Stryker enable all 
 
     // Stryker disable next-line all : TODO try to make a good test for this
     const toggleAdminCallback = async (cell) => { toggleAdminMutation.mutate(cell); }
+    const toggleDriverCallback = async (cell) => {toggleDriverMutation.mutate(cell); }
 
 
     const columns = [
@@ -60,6 +80,7 @@ export default function UsersTable({ users}) {
     const buttonColumn = [
         ...columns,
         ButtonColumn("toggle-admin", "primary", toggleAdminCallback, "UsersTable"),
+        ButtonColumn("toggle-driver", "primary", toggleDriverCallback, "UsersTable"),
     ]
 
     //const columnsToDisplay = showButtons ? buttonColumn : columns;

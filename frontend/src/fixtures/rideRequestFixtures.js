@@ -1,5 +1,6 @@
 const rideRequestFixtures = {
     oneRideRequest: {
+        "userid": 1,
         "day": "Monday",
         "fullName": "Bob John",
         "course": "Math 4A",
@@ -11,6 +12,7 @@ const rideRequestFixtures = {
     },
     threeRideRequests: [
         {
+            "userid": 2,
             "day": "Tuesday",
             "fullName": "Tim Smith",
             "course": "ANTH 2",
@@ -21,6 +23,7 @@ const rideRequestFixtures = {
             "pickup": "Lot 3"
         },
         {
+            "userid": 3,
             "day": "Wednesday",
             "fullName": "Peter Parker",
             "course": "CHEM 1B",
@@ -31,6 +34,7 @@ const rideRequestFixtures = {
             "pickup": "Anacapa Residence Hall"
         },
         {
+            "userid": 4,
             "day": "Thursday",
             "fullName": "Lisa Simpson",
             "course": "ENGL 23",

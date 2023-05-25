@@ -83,7 +83,7 @@ public class UsersController extends ApiController {
     }
 
       
-    @ApiOperation(value = "Toggle the Driver/User field")
+    @ApiOperation(value = "Toggle the Driver field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/toggleDriver")
     public Object toggleDriver( @ApiParam("id") @RequestParam Long id){

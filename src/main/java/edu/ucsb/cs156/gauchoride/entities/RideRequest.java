@@ -12,13 +12,14 @@ import javax.persistence.GenerationType;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Builder
 @Entity(name = "riderequests")
 public class RideRequest {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+  private Long userid;
   private String day;
   private String fullName;
   private String course;

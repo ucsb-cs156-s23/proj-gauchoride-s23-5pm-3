@@ -90,7 +90,7 @@ import io.swagger.annotations.ApiParam;
 <span class="fc" id="L90">        User user = userRepository.findById(id)</span>
 <span class="pc" id="L91">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, id));</span>
 
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        user.setDriver(!user.getDriver());</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        user.setDriver(!user.getDriver());</span>
 <span class="fc" id="L94">        userRepository.save(user);</span>
 <span class="fc" id="L95">        return genericMessage(&quot;User with id %s has toggled driver status&quot;.formatted(id));</span>
     }

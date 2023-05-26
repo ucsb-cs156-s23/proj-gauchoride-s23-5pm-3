@@ -15,7 +15,7 @@ describe("RideRequestForm tests", () => {
 
     test("renders correctly", async () => {
 
-        const { getByText, findByText } = render(
+        const { findByText } = render(
             <Router  >
                 <RideRequestForm />
             </Router>
@@ -27,7 +27,7 @@ describe("RideRequestForm tests", () => {
 
     test("renders correctly when passing in a RideRequest", async () => {
 
-        const { getByText, getByTestId, findByTestId } = render(
+        const { getByText, findByTestId } = render(
             <Router  >
                 <RideRequestForm initialRideRequest={rideRequestFixtures.oneRideRequest} />
             </Router>

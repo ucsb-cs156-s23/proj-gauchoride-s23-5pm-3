@@ -26,7 +26,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     <Form.Group className="mb-3" >
                         <Form.Label htmlFor="userid">User ID</Form.Label>
                         <Form.Control
-                            data-testid="UCSBDateForm-userid"
+                            data-testid="RideRequestForm-userid"
                             id="userid"
                             type="text"
                             {...register("userid")}
@@ -46,7 +46,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                             })}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.name?.message}
+                            {errors.fullName?.message}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </>
@@ -57,20 +57,12 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                 <Form.Control
                     data-testid="RideRequestForm-day"
                     id="day"
-                    type="select"
+                    type='text'
                     isInvalid={Boolean(errors.day)}
-                    {...register("day", { required: true })}
-                >
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                    <option>Sunday</option>
-                </Form.Control>
+                    {...register("day", { required: "Day is required" })}
+                />
                 <Form.Control.Feedback type="invalid">
-                    {errors.day && 'Day is required. '}
+                    {errors.day?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -81,10 +73,10 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     id="course"
                     type="text"
                     isInvalid={Boolean(errors.localDateTime)}
-                    {...register("course", { required: true })}
+                    {...register("course", { required: "Course is required" })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.course && 'Course is required. '}
+                    {errors.course?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -100,7 +92,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.name?.message}
+                    {errors.startTime?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -112,11 +104,11 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     type="text"
                     isInvalid={Boolean(errors.stopTime)}
                     {...register("stopTime", {
-                        required: "Full Name is required."
+                        required: "Stop Time is required."
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.name?.message}
+                    {errors.stopTime?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -132,7 +124,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.name?.message}
+                    {errors.building?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -148,7 +140,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.name?.message}
+                    {errors.room?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -164,7 +156,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.name?.message}
+                    {errors.pickup?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 

@@ -31,7 +31,7 @@ import javax.validation.Valid;
 @Api(description = "Driver shift information")
 @RequestMapping("/api/drivershifts")
 @RestController
-public class RideRequestController extends ApiController {
+public class DriverShiftController extends ApiController {
     @Autowired
     DriverShiftRepository driverShiftRepository;
 
@@ -52,7 +52,7 @@ public class RideRequestController extends ApiController {
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DRIVER') || hasRole('ROLE_RIDER')")
     @GetMapping("/all_driver")
     public ResponseEntity<String> getDriverShiftsById(
-        @ApiParam(name="driverid", type="Long", value="driverid of the driver", example="123", required=true) @RequestParam Long userid
+        @ApiParam(name="driverid", type="Long", value="driverid of the driver", example="123", required=true) @RequestParam Long driverid
         )
         throws JsonProcessingException {
 
@@ -64,7 +64,7 @@ public class RideRequestController extends ApiController {
     @ApiOperation(value = "Create a new shift")
     @PreAuthorize("hasRole('ROLE_DRIVER')")
     @PostMapping("/post")
-    public RideRequest postDriverShift(
+    public DriverShift postDriverShift(
         @ApiParam(name="userid", type="Long", value="driverid of the driver", example="123", required=true)  @RequestParam Long driverid,
         @ApiParam(name="fullName", type="String", value="name of the driver", example="Joe", required=true) @RequestParam String fullName,
         @ApiParam(name="day", type="String", value="day, one of [Monday, Tuesday,..., Sunday]", example="Monday", required=true) @RequestParam String day,
@@ -75,12 +75,12 @@ public class RideRequestController extends ApiController {
         throws JsonProcessingException {
 
         DriverShift driverShift = new DriverShift();
-        rideRequest.setDriverid(driverid);
-        rideRequest.setFullName(fullName);
-        rideRequest.setDay(day);
-        rideRequest.setStartTime(startTime);
-        rideRequest.setStopTime(stopTime);
-        rideRequest.setBackupDriver(backupDriver);
+        driverShift.setDriverid(driverid);
+        driverShift.setFullName(fullName);
+        driverShift.setDay(day);
+        driverShift.setStartTime(startTime);
+        driverShift.setStopTime(stopTime);
+        driverShift.setBackupDriver(backupDriver);
 
         DriverShift saved = driverShiftRepository.save(driverShift);
 

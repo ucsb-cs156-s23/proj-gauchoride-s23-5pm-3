@@ -47,21 +47,6 @@ public class DriverShiftControllerTests extends ControllerTestCase {
         .andExpect(status().is(403));
   }
 
-//   @WithMockUser(roles = { "DRIVER" })
-//   @Test
-//   public void driverShifts__rider_all_fail() throws Exception {
-//     mockMvc.perform(get("/api/drivershifts/all"))
-//         .andExpect(status().is(403));
-//   }
-
-//   @WithMockUser(roles = { "ADMIN", "DRIVER" })
-//   @Test
-//   public void driverShifts__admin_driver_fail() throws Exception {
-//     mockMvc.perform(get("/api/drivershifts/all_rider?userid=1"))
-//         .andExpect(status().is(403));
-//   }
-
-
   @WithMockUser(roles = { "ADMIN", "DRIVER", "RIDER" })
   @Test
   public void driverShifts_succ() throws Exception {
@@ -106,7 +91,7 @@ public class DriverShiftControllerTests extends ControllerTestCase {
 
   @WithMockUser(roles = { "RIDER" })
   @Test
-  public void driverShifts__getById_succ() throws Exception {
+  public void driverShifts_getById_succ() throws Exception {
 
     // arrange
 
@@ -130,17 +115,17 @@ public class DriverShiftControllerTests extends ControllerTestCase {
     ArrayList<DriverShift> expectedDriverShifts = new ArrayList<>();
     expectedDriverShifts.addAll(Arrays.asList(u1));
 
-    when(driverShiftRepository.findAllByUserid(1L)).thenReturn(expectedDriverShifts);
+    when(driverShiftRepository.findAllByDriverid(1L)).thenReturn(expectedDriverShifts);
     String expectedJson = mapper.writeValueAsString(expectedDriverShifts);
     
     // act
 
-    MvcResult response = mockMvc.perform(get("/api/drivershifts/all_rider?userid=1"))
+    MvcResult response = mockMvc.perform(get("/api/drivershifts/all_driver?driverid=1"))
         .andExpect(status().isOk()).andReturn();
 
     // assert
 
-    verify(driverShiftRepository, times(1)).findAllByUserid(1L);
+    verify(driverShiftRepository, times(1)).findAllByDriverid(1L);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
 
@@ -206,7 +191,7 @@ public class DriverShiftControllerTests extends ControllerTestCase {
 			verify(driverShiftRepository, times(1)).delete(any());
 
 			Map<String, Object> json = responseToJson(response);
-			assertEquals("Ride request with id 6 deleted", json.get("message"));
+			assertEquals("Driver shift with id 6 deleted", json.get("message"));
 	}
 
 	@WithMockUser(roles = { "ADMIN", "DRIVER" })
@@ -274,33 +259,33 @@ public class DriverShiftControllerTests extends ControllerTestCase {
 	@WithMockUser(roles = { "ADMIN", "DRIVER" })
 	@Test
 	public void edit_does_not_exist() throws Exception {
-		// // arrange
+		// arrange
 
-		// DriverShift u2 = DriverShift.builder()
-		// 	.driverid(1L)
-		// 	.fullName("Bob")
-		// 	.day("Monday")
-		// 	.startTime("12AM")
-		// 	.stopTime("12AM")
-		// 	.backupDriver("")
-		// 	.build();
-					String requestBody = mapper.writeValueAsString(u2);
+		DriverShift u2 = DriverShift.builder()
+			.driverid(1L)
+			.fullName("Bob")
+			.day("Monday")
+			.startTime("12AM")
+			.stopTime("12AM")
+			.backupDriver("")
+			.build();
+		String requestBody = mapper.writeValueAsString(u2);
 
-					when(driverShiftRepository.findById(eq(5L))).thenReturn(Optional.empty());
+		when(driverShiftRepository.findById(eq(5L))).thenReturn(Optional.empty());
 
-					// act
-					MvcResult response = mockMvc.perform(
-													put("/api/drivershifts/put?id=5")
-																					.contentType(MediaType.APPLICATION_JSON)
-																					.characterEncoding("utf-8")
-																					.content(requestBody)
-																					.with(csrf()))
-													.andExpect(status().isNotFound()).andReturn();
+		// act
+		MvcResult response = mockMvc.perform(
+			put("/api/drivershifts/put?id=5")
+				.contentType(MediaType.APPLICATION_JSON)
+				.characterEncoding("utf-8")
+				.content(requestBody)
+				.with(csrf()))
+			.andExpect(status().isNotFound()).andReturn();
 
-					// assert
-					verify(driverShiftRepository, times(1)).findById(5L);
-					Map<String, Object> json = responseToJson(response);
-					assertEquals("DriverShift with id 5 not found", json.get("message"));
+		// assert
+		verify(driverShiftRepository, times(1)).findById(5L);
+		Map<String, Object> json = responseToJson(response);
+		assertEquals("DriverShift with id 5 not found", json.get("message"));
 
 	}
 

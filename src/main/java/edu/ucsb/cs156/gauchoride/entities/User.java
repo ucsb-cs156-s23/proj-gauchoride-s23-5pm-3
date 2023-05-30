@@ -29,7 +29,6 @@ public class User {
   private String locale;
   private String hostedDomain;
   private boolean admin;
-  //@Builder.Default
   private boolean driver;
   
 }

@@ -112,6 +112,7 @@ describe("RideEditPage tests", () => {
         expect(updateButton).toBeInTheDocument();
         
 
+        // TODO: FIX VALUES
         await act(async () => {
             fireEvent.change(givenNameInput, { target: { value: 'Dog Park' } })
             fireEvent.change(addressInput, { target: { value: '123 Ave' } })
@@ -125,6 +126,7 @@ describe("RideEditPage tests", () => {
         // assert - check that the console.log was called with the expected message
         expect(console.log).toHaveBeenCalled();
         const message = console.log.mock.calls[0][0];
+        // TODO: make new test cases
         const expectedMessage =  `updatedPark: {"park":{"id":3,"name":"Dog Park","address":"123 Ave","rating":"4"}`
 
         expect(message).toMatch(expectedMessage);

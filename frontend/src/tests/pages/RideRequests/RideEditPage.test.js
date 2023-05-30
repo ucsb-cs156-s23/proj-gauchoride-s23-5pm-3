@@ -1,5 +1,5 @@
 import { render, screen, act, waitFor, fireEvent } from "@testing-library/react";
-import ParkEditPage from "main/pages/Rides/RideEditPage";
+import RideEditPage from "main/pages/Rides/RideEditPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import mockConsole from "jest-mock-console";
@@ -46,7 +46,7 @@ describe("RideEditPage tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <ParkEditPage />
+                    <RideEditPage />
                 </MemoryRouter>
             </QueryClientProvider>
         );
@@ -57,7 +57,7 @@ describe("RideEditPage tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <ParkEditPage />
+                    <RideEditPage />
                 </MemoryRouter>
             </QueryClientProvider>
         );
@@ -93,7 +93,7 @@ describe("RideEditPage tests", () => {
         render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
-                    <ParkEditPage />
+                    <RideEditPage />
                 </MemoryRouter>
             </QueryClientProvider>
         )

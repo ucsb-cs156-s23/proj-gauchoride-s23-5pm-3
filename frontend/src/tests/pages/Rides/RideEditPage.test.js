@@ -27,15 +27,18 @@ jest.mock('main/utils/rideUtils', () => {
                         // this is from the park stuff from team01
                         // id, full name, email, admin, driver
                         id: 1,
-                        name: "Anderson Park",
-                        address: "123 Fake Ave",
-                        rating: "3.9"
+                        givenName: "Jason",
+                        familyName: "Vu",
+                        email: "jasonvu@ucsb.edu",
+                        admin: "true",
+                        driver: "false"
                     }
                 }
             }
         }
     }
 });
+
 
 
 describe("RideEditPage tests", () => {

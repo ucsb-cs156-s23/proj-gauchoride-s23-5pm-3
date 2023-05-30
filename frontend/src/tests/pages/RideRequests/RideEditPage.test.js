@@ -23,7 +23,7 @@ jest.mock('main/utils/rideUtils', () => {
             getById: (_id) => {
                 return {
                     ride: {
-                        id: 2,
+                        id: 1,
                         givenName: "Jason",
                         familyName: "Vu",
                         email: "jasonvu@ucsb.edu",
@@ -74,6 +74,7 @@ describe("RideEditPage tests", () => {
 
     });
 
+    // might rename /Rides here
     test("redirects to /Rides on submit", async () => {
 
         const restoreConsole = mockConsole();
@@ -97,7 +98,6 @@ describe("RideEditPage tests", () => {
             </QueryClientProvider>
         )
 
-
         // TODO: EDIT THESE VALUES
         const givenNameInput = screen.getByLabelText("First Name");
         expect(givenNameInput).toBeInTheDocument();
@@ -112,14 +112,15 @@ describe("RideEditPage tests", () => {
         expect(updateButton).toBeInTheDocument();
         
 
-        // TODO: FIX VALUES
+
         await act(async () => {
-            fireEvent.change(givenNameInput, { target: { value: 'Dog Park' } })
-            fireEvent.change(addressInput, { target: { value: '123 Ave' } })
-            fireEvent.change(ratingInput, { target: { value: '4' } })
+            fireEvent.change(givenNameInput, { target: { value: 'Phill' } })
+            fireEvent.change(familyNameInput, { target: { value: 'Conrad' } })
+            fireEvent.change(emailInput, { target: { value: 'phtcon@ucsb.edu' } })
             fireEvent.click(updateButton);
         });
 
+        // might need to edit /Rides here
         await waitFor(() => expect(mockUpdate).toHaveBeenCalled());
         await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/Rides"));
 
@@ -127,7 +128,7 @@ describe("RideEditPage tests", () => {
         expect(console.log).toHaveBeenCalled();
         const message = console.log.mock.calls[0][0];
         // TODO: make new test cases
-        const expectedMessage =  `updatedPark: {"park":{"id":3,"name":"Dog Park","address":"123 Ave","rating":"4"}`
+        const expectedMessage =  `updatedRide: {"ride":{"id":1,"First Name":"Phill","Last Name":"Conrad","Email":"phtcon@ucsb.edu"}`
 
         expect(message).toMatch(expectedMessage);
         restoreConsole();

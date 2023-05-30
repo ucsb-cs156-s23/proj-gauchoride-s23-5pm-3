@@ -51,43 +51,46 @@ import javax.validation.Valid;
     @ApiOperation(value = &quot;Get a list of all ride requests for current rider&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_RIDER')&quot;)
     @GetMapping(&quot;/all_rider&quot;)
-    public ResponseEntity&lt;String&gt; rideRequestsRider(@ApiParam(&quot;userid&quot;) @RequestParam Long userid)
-            throws JsonProcessingException {
-<span class="fc" id="L56">        Iterable&lt;RideRequest&gt; rideRequests = rideRequestRepository.findAllByUserid(userid);</span>
-<span class="fc" id="L57">        String body = mapper.writeValueAsString(rideRequests);</span>
-<span class="fc" id="L58">        return ResponseEntity.ok().body(body);</span>
+    public ResponseEntity&lt;String&gt; rideRequestsRider(
+        @ApiParam(name=&quot;userid&quot;, type=&quot;Long&quot;, value=&quot;userid of the rider&quot;, example=&quot;123&quot;, required=true) @RequestParam Long userid
+        )
+        throws JsonProcessingException {
+
+<span class="fc" id="L59">        Iterable&lt;RideRequest&gt; rideRequests = rideRequestRepository.findAllByUserid(userid);</span>
+<span class="fc" id="L60">        String body = mapper.writeValueAsString(rideRequests);</span>
+<span class="fc" id="L61">        return ResponseEntity.ok().body(body);</span>
     }
 
     @ApiOperation(value = &quot;Create a new ride request&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_RIDER')&quot;)
     @PostMapping(&quot;/post&quot;)
     public RideRequest postRideRequest(
-        @ApiParam(&quot;userid&quot;) @RequestParam Long userid,
-        @ApiParam(&quot;day&quot;) @RequestParam String day,
-        @ApiParam(&quot;fullName&quot;) @RequestParam String fullName,
-        @ApiParam(&quot;course&quot;) @RequestParam String course,
-        @ApiParam(&quot;startTime&quot;) @RequestParam String startTime,
-        @ApiParam(&quot;stopTime&quot;) @RequestParam String stopTime,
-        @ApiParam(&quot;building&quot;) @RequestParam String building,
-        @ApiParam(&quot;room&quot;) @RequestParam String room,
-        @ApiParam(&quot;pickup&quot;) @RequestParam String pickup
+        @ApiParam(name=&quot;userid&quot;, type=&quot;Long&quot;, value=&quot;userid of the rider&quot;, example=&quot;123&quot;, required=true)  @RequestParam Long userid,
+        @ApiParam(name=&quot;day&quot;, type=&quot;String&quot;, value=&quot;day, one of [Monday, Tuesday,..., Sunday]&quot;, example=&quot;Monday&quot;, required=true) @RequestParam String day,
+        @ApiParam(name=&quot;fullName&quot;, type=&quot;String&quot;, value=&quot;name of the rider&quot;, example=&quot;Joe&quot;, required=true) @RequestParam String fullName,
+        @ApiParam(name=&quot;course&quot;, type=&quot;String&quot;, value=&quot;course to attend&quot;, example=&quot;CS 156&quot;, required=true) @RequestParam String course,
+        @ApiParam(name=&quot;startTime&quot;, type=&quot;String&quot;, value=&quot;start time, format: HH:MM XM&quot;, example=&quot;12:00 AM&quot;, required=true) @RequestParam String startTime,
+        @ApiParam(name=&quot;stopTime&quot;, type=&quot;String&quot;, value=&quot;stop time, format: HH:MM XM&quot;, example=&quot;12:00 AM&quot;, required=true) @RequestParam String stopTime,
+        @ApiParam(name=&quot;building&quot;, type=&quot;String&quot;, value=&quot;destination building&quot;, example=&quot;Phelps&quot;, required=true) @RequestParam String building,
+        @ApiParam(name=&quot;room&quot;, type=&quot;String&quot;, value=&quot;destination room&quot;, example=&quot;EUCR, 3525&quot;, required=true) @RequestParam String room,
+        @ApiParam(name=&quot;pickup&quot;, type=&quot;String&quot;, value=&quot;pickup location&quot;, example=&quot;San Rafael Hall&quot;, required=true) @RequestParam String pickup
         )
         throws JsonProcessingException {
 
-<span class="fc" id="L77">        RideRequest rideRequest = new RideRequest();</span>
-<span class="fc" id="L78">        rideRequest.setUserid(userid);</span>
-<span class="fc" id="L79">        rideRequest.setDay(day);</span>
-<span class="fc" id="L80">        rideRequest.setFullName(fullName);</span>
-<span class="fc" id="L81">        rideRequest.setCourse(course);</span>
-<span class="fc" id="L82">        rideRequest.setStartTime(startTime);</span>
-<span class="fc" id="L83">        rideRequest.setStopTime(stopTime);</span>
-<span class="fc" id="L84">        rideRequest.setBuilding(building);</span>
-<span class="fc" id="L85">        rideRequest.setRoom(room);</span>
-<span class="fc" id="L86">        rideRequest.setPickup(pickup);</span>
+<span class="fc" id="L80">        RideRequest rideRequest = new RideRequest();</span>
+<span class="fc" id="L81">        rideRequest.setUserid(userid);</span>
+<span class="fc" id="L82">        rideRequest.setDay(day);</span>
+<span class="fc" id="L83">        rideRequest.setFullName(fullName);</span>
+<span class="fc" id="L84">        rideRequest.setCourse(course);</span>
+<span class="fc" id="L85">        rideRequest.setStartTime(startTime);</span>
+<span class="fc" id="L86">        rideRequest.setStopTime(stopTime);</span>
+<span class="fc" id="L87">        rideRequest.setBuilding(building);</span>
+<span class="fc" id="L88">        rideRequest.setRoom(room);</span>
+<span class="fc" id="L89">        rideRequest.setPickup(pickup);</span>
 
-<span class="fc" id="L88">        RideRequest saved = rideRequestRepository.save(rideRequest);</span>
+<span class="fc" id="L91">        RideRequest saved = rideRequestRepository.save(rideRequest);</span>
 
-<span class="fc" id="L90">        return saved;</span>
+<span class="fc" id="L93">        return saved;</span>
     }
 
     @ApiOperation(value = &quot;Delete a ride request&quot;)
@@ -95,12 +98,12 @@ import javax.validation.Valid;
     @DeleteMapping(&quot;/delete&quot;)
     public Object deleteRideRequest_Admin(
             @ApiParam(&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L98">              RideRequest rideRequest = rideRequestRepository.findById(id)</span>
-<span class="fc" id="L99">          .orElseThrow(() -&gt; new EntityNotFoundException(RideRequest.class, id));</span>
+<span class="fc" id="L101">              RideRequest rideRequest = rideRequestRepository.findById(id)</span>
+<span class="fc" id="L102">          .orElseThrow(() -&gt; new EntityNotFoundException(RideRequest.class, id));</span>
 
-<span class="fc" id="L101">          rideRequestRepository.delete(rideRequest);</span>
+<span class="fc" id="L104">          rideRequestRepository.delete(rideRequest);</span>
 
-<span class="fc" id="L103">        return genericMessage(&quot;Ride request with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L106">        return genericMessage(&quot;Ride request with id %s deleted&quot;.formatted(id));</span>
     }
 
     @ApiOperation(value = &quot;Update a ride request&quot;)
@@ -110,21 +113,21 @@ import javax.validation.Valid;
             @ApiParam(&quot;id&quot;) @RequestParam Long id,
             @RequestBody @Valid RideRequest incoming) {
 
-<span class="fc" id="L113">        RideRequest rideRequest = rideRequestRepository.findById(id)</span>
-<span class="fc" id="L114">                .orElseThrow(() -&gt; new EntityNotFoundException(RideRequest.class, id));</span>
+<span class="fc" id="L116">        RideRequest rideRequest = rideRequestRepository.findById(id)</span>
+<span class="fc" id="L117">                .orElseThrow(() -&gt; new EntityNotFoundException(RideRequest.class, id));</span>
 
-<span class="fc" id="L116">        rideRequest.setDay(incoming.getDay());</span>
-<span class="fc" id="L117">        rideRequest.setFullName(incoming.getFullName());</span>
-<span class="fc" id="L118">        rideRequest.setCourse(incoming.getCourse());</span>
-<span class="fc" id="L119">        rideRequest.setStartTime(incoming.getStartTime());</span>
-<span class="fc" id="L120">        rideRequest.setStopTime(incoming.getStopTime());</span>
-<span class="fc" id="L121">        rideRequest.setBuilding(incoming.getBuilding());</span>
-<span class="fc" id="L122">        rideRequest.setRoom(incoming.getRoom());</span>
-<span class="fc" id="L123">        rideRequest.setPickup(incoming.getPickup());</span>
+<span class="fc" id="L119">        rideRequest.setDay(incoming.getDay());</span>
+<span class="fc" id="L120">        rideRequest.setFullName(incoming.getFullName());</span>
+<span class="fc" id="L121">        rideRequest.setCourse(incoming.getCourse());</span>
+<span class="fc" id="L122">        rideRequest.setStartTime(incoming.getStartTime());</span>
+<span class="fc" id="L123">        rideRequest.setStopTime(incoming.getStopTime());</span>
+<span class="fc" id="L124">        rideRequest.setBuilding(incoming.getBuilding());</span>
+<span class="fc" id="L125">        rideRequest.setRoom(incoming.getRoom());</span>
+<span class="fc" id="L126">        rideRequest.setPickup(incoming.getPickup());</span>
 
-<span class="fc" id="L125">        rideRequestRepository.save(rideRequest);</span>
+<span class="fc" id="L128">        rideRequestRepository.save(rideRequest);</span>
 
-<span class="fc" id="L127">        return rideRequest;</span>
+<span class="fc" id="L130">        return rideRequest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

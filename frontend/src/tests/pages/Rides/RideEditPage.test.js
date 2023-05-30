@@ -25,7 +25,8 @@ jest.mock('main/utils/rideUtils', () => {
                     ride: { // EDIT: CHANGE THIS TEST CASE
                         // look @ park form/table
                         // this is from the park stuff from team01
-                        id: 3,
+                        // id, full name, email, admin, driver
+                        id: 1,
                         name: "Anderson Park",
                         address: "123 Fake Ave",
                         rating: "3.9"

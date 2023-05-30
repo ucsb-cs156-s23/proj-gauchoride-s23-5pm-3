@@ -1,5 +1,6 @@
 const rideRequestFixtures = {
     oneRideRequest: {
+        "id": 1,
         "userid": 1,
         "day": "Monday",
         "fullName": "Bob John",
@@ -12,6 +13,7 @@ const rideRequestFixtures = {
     },
     threeRideRequests: [
         {
+            "id": 2,
             "userid": 2,
             "day": "Tuesday",
             "fullName": "Tim Smith",
@@ -23,6 +25,7 @@ const rideRequestFixtures = {
             "pickup": "Lot 3"
         },
         {
+            "id": 3,
             "userid": 3,
             "day": "Wednesday",
             "fullName": "Peter Parker",
@@ -34,6 +37,7 @@ const rideRequestFixtures = {
             "pickup": "Anacapa Residence Hall"
         },
         {
+            "id": 4,
             "userid": 4,
             "day": "Thursday",
             "fullName": "Lisa Simpson",
@@ -41,7 +45,7 @@ const rideRequestFixtures = {
             "startTime": "9:30AM",
             "stopTime": "10:45PM",
             "building": "Campbell Hall",
-            "room": "",
+            "room": "1",
             "pickup": "Lot 1"
         }
     ]

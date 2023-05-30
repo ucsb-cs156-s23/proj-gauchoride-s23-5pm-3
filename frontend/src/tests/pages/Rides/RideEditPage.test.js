@@ -22,11 +22,8 @@ jest.mock('main/utils/rideUtils', () => {
             update: (ride) => {return mockUpdate();},
             getById: (_id) => {
                 return {
-                    ride: { // EDIT: CHANGE THIS TEST CASE
-                        // look @ park form/table
-                        // this is from the park stuff from team01
-                        // id, full name, email, admin, driver
-                        id: 1,
+                    ride: {
+                        id: 2,
                         givenName: "Jason",
                         familyName: "Vu",
                         email: "jasonvu@ucsb.edu",
@@ -65,24 +62,30 @@ describe("RideEditPage tests", () => {
             </QueryClientProvider>
         );
 
-        // TODO: EDIT THIS
-        expect(screen.getByTestId("ParkForm-name")).toBeInTheDocument();
-        expect(screen.getByDisplayValue('Anderson Park')).toBeInTheDocument();
-        expect(screen.getByDisplayValue('123 Fake Ave')).toBeInTheDocument();
-        expect(screen.getByDisplayValue('3.9')).toBeInTheDocument();
+        // Might have to edit the display value for true/false (?)
+
+
+        expect(screen.getByTestId("RideForm-name")).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Jason')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Vu')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('jasonvu@ucsb.edu')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('true')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('false')).toBeInTheDocument();
+
     });
 
     test("redirects to /Rides on submit", async () => {
 
         const restoreConsole = mockConsole();
 
-        // TODO: EDIT THESE VALUES
         mockUpdate.mockReturnValue({
-            "park": {
-                id: 3,
-                name: "Dog Park",
-                address: "123 Ave",
-                rating: "4"
+            "ride": {
+                id: 1,
+                givenName: "Phill",
+                familyName: "Conrad",
+                email: "phtcon@ucsb.edu",
+                admin: "true",
+                driver: "false"
             }
         });
 
@@ -96,21 +99,21 @@ describe("RideEditPage tests", () => {
 
 
         // TODO: EDIT THESE VALUES
-        const nameInput = screen.getByLabelText("Name");
-        expect(nameInput).toBeInTheDocument();
+        const givenNameInput = screen.getByLabelText("First Name");
+        expect(givenNameInput).toBeInTheDocument();
 
-
-        const addressInput = screen.getByLabelText("Address");
-        expect(addressInput).toBeInTheDocument();
+        const familyNameInput = screen.getByLabelText("Last Name");
+        expect(familyNameInput).toBeInTheDocument();
         
-        const ratingInput = screen.getByLabelText("Rating");
-        expect(ratingInput).toBeInTheDocument();
+        const emailInput = screen.getByLabelText("Email");
+        expect(emailInput).toBeInTheDocument();
 
         const updateButton = screen.getByText("Update");
         expect(updateButton).toBeInTheDocument();
+        
 
         await act(async () => {
-            fireEvent.change(nameInput, { target: { value: 'Dog Park' } })
+            fireEvent.change(givenNameInput, { target: { value: 'Dog Park' } })
             fireEvent.change(addressInput, { target: { value: '123 Ave' } })
             fireEvent.change(ratingInput, { target: { value: '4' } })
             fireEvent.click(updateButton);

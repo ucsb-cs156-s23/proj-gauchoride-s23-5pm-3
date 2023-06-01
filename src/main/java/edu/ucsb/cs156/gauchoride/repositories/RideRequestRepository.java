@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface RideRequestRepository extends CrudRepository<RideRequest, Long> {
-    Iterable<RideRequest> findAllByUserid(Long userid);
+  Iterable<RideRequest> findAllByRiderId(Long riderId);
 }

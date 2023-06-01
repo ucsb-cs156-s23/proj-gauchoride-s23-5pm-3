@@ -19,12 +19,13 @@ public class RideRequest {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  private Long userid;
-  private String day;
+  private Long riderId;
+  private String day; // One of [Monday, Tuesday,..., Sunday]
   private String course;
   private String startTime;
   private String stopTime;
   private String building;
   private String room;
-  private String pickup;
+  private String pickupLocation;
+
 }

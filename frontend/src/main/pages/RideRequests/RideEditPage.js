@@ -2,21 +2,21 @@
 
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import { useParams } from "react-router-dom";
-import BookForm from "main/components/Books/BookForm";
+import RideForm from "main/components/Rides/RideForm";
 import { Navigate } from 'react-router-dom'
 import { useBackend, useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify";
 
-export default function BooksEditPage() {
+export default function RidesEditPage() {
   let { id } = useParams();
 
-  const { data: Book, error, status } =
+  const { data: Ride, error, status } =
     useBackend(
       // Stryker disable next-line all : don't test internal caching of React Query
       [`/api/books?id=${id}`],
       {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
         method: "GET",
-        url: `/api/books`,
+        url: `/api/rides`,
         params: {
           id
         }
@@ -24,21 +24,25 @@ export default function BooksEditPage() {
     );
 
 
-  const objectToAxiosPutParams = (Book) => ({
-    url: "/api/books",
+  const objectToAxiosPutParams = (Ride) => ({
+    url: "/api/rides",
     method: "PUT",
     params: {
-      id: Book.id,
+      id: Ride.id,
     },
+
+
     data: {
-      title: Book.title,
-      author: Book.author,
-      genre: Book.genre
+      givenName: Ride.givenName,
+      familyName: Ride.familyName,
+      email: Ride.email,
+      admin: Ride.admin,
+      driver: Ride.driver
     }
   });
 
   const onSuccess = (Book) => {
-    toast(`Book Updated - id: ${Book.id} title: ${Book.title} author: ${Book.author} genre: ${Book.genre}`);
+    toast(`Book Updated - id: ${Ride.id} givenName: ${Ride.givenName} email: ${Ride.email} admin: ${Ride.admin} driver: ${Ride.driver}`);
   }
 
   const mutation = useBackendMutation(
@@ -55,15 +59,15 @@ export default function BooksEditPage() {
   }
 
   if (isSuccess) {
-    return <Navigate to="/Books/list" />
+    return <Navigate to="/Rides/list" />
   }
 
   return (
     <BasicLayout>
       <div className="pt-2">
-        <h1>Edit Book</h1>
-        {Book &&
-          <BookForm initialContents={Book} submitAction={onSubmit} buttonLabel="Update" />
+        <h1>Edit Ride</h1>
+        {Ride &&
+          <RideForm initialContents={Ride} submitAction={onSubmit} buttonLabel="Update" />
         }
       </div>
     </BasicLayout>

@@ -2,7 +2,7 @@
 
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import { useParams } from "react-router-dom";
-import RideForm from "main/components/Rides/RideForm";
+import RideForm from "main/components/RideRequests/RideForm";
 import { Navigate } from 'react-router-dom'
 import { useBackend, useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify";
@@ -13,7 +13,7 @@ export default function RidesEditPage() {
   const { data: Ride, error, status } =
     useBackend(
       // Stryker disable next-line all : don't test internal caching of React Query
-      [`/api/books?id=${id}`],
+      [`/api/RideRequests?id=${id}`],
       {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
         method: "GET",
         url: `/api/RidesRequests`,
@@ -41,15 +41,15 @@ export default function RidesEditPage() {
     }
   });
 
-  const onSuccess = (Book) => {
-    toast(`Book Updated - id: ${Ride.id} givenName: ${Ride.givenName} email: ${Ride.email} admin: ${Ride.admin} driver: ${Ride.driver}`);
+  const onSuccess = (Ride) => {
+    toast(`Ride Updated - id: ${Ride.id} givenName: ${Ride.givenName} email: ${Ride.email} admin: ${Ride.admin} driver: ${Ride.driver}`);
   }
 
   const mutation = useBackendMutation(
     objectToAxiosPutParams,
     { onSuccess },
     // Stryker disable next-line all : hard to set up test for caching
-    [`/api/books?id=${id}`]
+    [`/api/RideRequests?id=${id}`]
   );
 
   const { isSuccess } = mutation

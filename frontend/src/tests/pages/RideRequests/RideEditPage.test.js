@@ -35,9 +35,9 @@ jest.mock('react-router-dom', () => {
     };
 });
 
-describe("BookEditPage tests", () => {
+describe("RideEditPage tests", () => {
 
-    describe("when the backend doesn't return a book", () => {
+    describe("when the backend doesn't return a ride", () => {
 
         const axiosMock = new AxiosMockAdapter(axios);
 
@@ -46,7 +46,7 @@ describe("BookEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/books", { params: { id: 17 } }).timeout();
+            axiosMock.onGet("/api/RideRequsts", { params: { id: 17 } }).timeout();
         });
 
         const queryClient = new QueryClient();
@@ -57,12 +57,12 @@ describe("BookEditPage tests", () => {
             const {getByText, queryByTestId, findByText} = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <BookEditPage />
+                        <RideEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
-            await findByText("Edit Book");
-            expect(queryByTestId("BookForm-title")).not.toBeInTheDocument();
+            await findByText("Edit Ride");
+            expect(queryByTestId("RideForm-title")).not.toBeInTheDocument();
             restoreConsole();
         });
     });
@@ -76,13 +76,13 @@ describe("BookEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/books", { params: { id: 17 } }).reply(200, {
+            axiosMock.onGet("/api/RideRequsts", { params: { id: 17 } }).reply(200, {
                 id: 17,
                 title: 'IT',
                 author: "Stephen King",
                 genre: "Horror"
             });
-            axiosMock.onPut('/api/books').reply(200, {
+            axiosMock.onPut('/api/RideRequests').reply(200, {
                 id: "17",
                 title: 'IT2',
                 author: "Stephen King2",

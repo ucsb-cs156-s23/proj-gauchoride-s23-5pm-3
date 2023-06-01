@@ -76,7 +76,6 @@ public class UsersController extends ApiController {
     public Object toggleAdmin( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-
         user.setAdmin(!user.getAdmin());
         userRepository.save(user);
         return genericMessage("User with id %s has toggled admin status".formatted(id));
@@ -89,10 +88,20 @@ public class UsersController extends ApiController {
     public Object toggleDriver( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-
         user.setDriver(!user.getDriver());
         userRepository.save(user);
         return genericMessage("User with id %s has toggled driver status".formatted(id));
+    }
+
+    @ApiOperation(value = "Toggle the Rider field")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/toggleRider")
+    public Object toggleRider( @ApiParam("id") @RequestParam Long id){
+        User user = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(User.class, id));
+        user.setRider(!user.getRider());
+        userRepository.save(user);
+        return genericMessage("User with id %s has toggled rider status".formatted(id));
     }
 
 }

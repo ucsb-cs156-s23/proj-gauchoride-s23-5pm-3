@@ -30,5 +30,6 @@ public class User {
   private String hostedDomain;
   private boolean admin;
   private boolean driver;
+  private boolean rider;
   
 }

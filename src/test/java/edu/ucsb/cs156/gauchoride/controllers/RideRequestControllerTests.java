@@ -41,6 +41,28 @@ public class RideRequestControllerTests extends ControllerTestCase {
 	@MockBean
 	UserRepository userRepository;
 
+    RideRequest r1 = RideRequest.builder()
+        .riderId(1L)
+        .day("Monday")
+        .course("ART 1")
+        .startTime("12AM")
+        .stopTime("12AM")
+        .building("Phelps")
+        .room("3525")
+        .pickupLocation("asap")
+        .build();
+
+    RideRequest r2 = RideRequest.builder()
+        .riderId(2L)
+        .day("Monday")
+        .course("ART 1")
+        .startTime("12AM")
+        .stopTime("12AM")
+        .building("Phelps")
+        .room("3525")
+        .pickupLocation("asap")
+        .build();
+    
     @Test
     public void rideRequests__logged_out() throws Exception {
     mockMvc.perform(get("/api/riderequests/all"))
@@ -54,148 +76,84 @@ public class RideRequestControllerTests extends ControllerTestCase {
         .andExpect(status().is(403));
     }
 
-  @WithMockUser(roles = { "ADMIN", "DRIVER" })
-  @Test
-  public void rideRequests__admin_driver_fail() throws Exception {
-    mockMvc.perform(get("/api/riderequests/all_rider?userid=1"))
+    @WithMockUser(roles = { "ADMIN", "DRIVER" })
+    @Test
+    public void rideRequests__admin_driver_fail() throws Exception {
+    mockMvc.perform(get("/api/riderequests/all/rider"))
         .andExpect(status().is(403));
-  }
+    }
 
 
-  @WithMockUser(roles = { "ADMIN", "DRIVER" })
-  @Test
-  public void rideRequests__admin_driver_succ() throws Exception {
+    @WithMockUser(roles = { "ADMIN", "DRIVER" })
+    @Test
+    public void rideRequests__admin_driver_succ() throws Exception {
 
-    // arrange
+        ArrayList<RideRequest> expectedRideRequests = new ArrayList<>();
+        expectedRideRequests.addAll(Arrays.asList(r1, r2));
 
-    RideRequest u1 = RideRequest.builder()
-        .userid(1L)
-        .day("Monday")
-        .fullName("Bob")
-        .course("ART 1")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .building("Phelps")
-        .room("3525")
-        .pickup("asap")
-        .build();
-    RideRequest u2 = RideRequest.builder()
-        .userid(2L)
-        .day("Monday")
-        .fullName("Victor")
-        .course("ART 1")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .building("Phelps")
-        .room("3525")
-        .pickup("asap")
-        .build();
-
-    ArrayList<RideRequest> expectedRideRequests = new ArrayList<>();
-    expectedRideRequests.addAll(Arrays.asList(u1, u2));
-
-    when(rideRequestRepository.findAll()).thenReturn(expectedRideRequests);
-    String expectedJson = mapper.writeValueAsString(expectedRideRequests);
+        when(rideRequestRepository.findAll()).thenReturn(expectedRideRequests);
+        String expectedJson = mapper.writeValueAsString(expectedRideRequests);
     
-    // act
+        // act
 
-    MvcResult response = mockMvc.perform(get("/api/riderequests/all"))
-        .andExpect(status().isOk()).andReturn();
+        MvcResult response = mockMvc.perform(get("/api/riderequests/all"))
+            .andExpect(status().isOk()).andReturn();
 
-    // assert
+        // assert
 
-    verify(rideRequestRepository, times(1)).findAll();
-    String responseString = response.getResponse().getContentAsString();
-    assertEquals(expectedJson, responseString);
+        verify(rideRequestRepository, times(1)).findAll();
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
 
-  }
+    }
 
-  @WithMockUser(roles = { "RIDER" })
-  @Test
-  public void rideRequests__rider_succ() throws Exception {
+    @WithMockUser(roles = { "RIDER" })
+    @Test
+    public void rideRequests__rider_succ() throws Exception {
 
-    // arrange
+        ArrayList<RideRequest> expectedRideRequests = new ArrayList<>();
+        expectedRideRequests.addAll(Arrays.asList(r1));
 
-    RideRequest u1 = RideRequest.builder()
-        .userid(1L)
-        .day("Monday")
-        .fullName("Bob")
-        .course("ART 1")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .building("Phelps")
-        .room("3525")
-        .pickup("asap")
-        .build();
-    RideRequest u2 = RideRequest.builder()
-        .userid(2L)
-        .day("Monday")
-        .fullName("Victor")
-        .course("ART 1")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .building("Phelps")
-        .room("3525")
-        .pickup("asap")
-        .build();
-
-    ArrayList<RideRequest> expectedRideRequests = new ArrayList<>();
-    expectedRideRequests.addAll(Arrays.asList(u1));
-
-    when(rideRequestRepository.findAllByUserid(1L)).thenReturn(expectedRideRequests);
-    String expectedJson = mapper.writeValueAsString(expectedRideRequests);
+        when(rideRequestRepository.findAllByRiderId(1L)).thenReturn(expectedRideRequests);
+        String expectedJson = mapper.writeValueAsString(expectedRideRequests);
     
-    // act
+        // act
 
-    MvcResult response = mockMvc.perform(get("/api/riderequests/all_rider?userid=1"))
-        .andExpect(status().isOk()).andReturn();
+        MvcResult response = mockMvc.perform(get("/api/riderequests/all/rider"))
+            .andExpect(status().isOk()).andReturn();
 
-    // assert
+        // assert
 
-    verify(rideRequestRepository, times(1)).findAllByUserid(1L);
-    String responseString = response.getResponse().getContentAsString();
-    assertEquals(expectedJson, responseString);
+        verify(rideRequestRepository, times(1)).findAllByRiderId(1L);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
 
-  }
+    }
 
 	@WithMockUser(roles = { "RIDER" })
 	@Test
 	public void rider_post() throws Exception {
-			// arrange
 
-			RideRequest u1 = RideRequest.builder()
-        .userid(1L)
-        .day("Monday")
-        .fullName("Bob")
-        .course("ART 1")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .building("Phelps")
-        .room("3525")
-        .pickup("asap")
-        .build();
-			when(rideRequestRepository.save(eq(u1))).thenReturn(u1);
+        when(rideRequestRepository.save(eq(r1))).thenReturn(r1);
 
-			// act
-			MvcResult response = mockMvc.perform(
-							post("/api/riderequests/post")
-							.param("userid", "1")
-							.param("day", "Monday")
-							.param("fullName", "Bob")
-							.param("course", "ART 1")
-							.param("startTime", "12AM")
-							.param("stopTime", "12AM")
-							.param("building", "Phelps")
-							.param("room", "3525")
-							.param("pickup", "asap")
-											.with(csrf()))
-							.andExpect(status().isOk()).andReturn();
+        // act
+        MvcResult response = mockMvc.perform(
+            post("/api/riderequests/post")
+            .param("day", "Monday")
+            .param("course", "ART 1")
+            .param("startTime", "12AM")
+            .param("stopTime", "12AM")
+            .param("building", "Phelps")
+            .param("room", "3525")
+            .param("pickupLocation", "asap")
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
 
-			// assert
-			verify(rideRequestRepository, times(1)).save(u1);
-			String expectedJson = mapper.writeValueAsString(u1);
-			String responseString = response.getResponse().getContentAsString();
-			assertEquals(expectedJson, responseString);
+        // assert
+        verify(rideRequestRepository, times(1)).save(r1);
+        String expectedJson = mapper.writeValueAsString(r1);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
 	}
 
 }

@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiParam;
 
 import javax.validation.Valid;
 
-@Api(description = "Ride request information (admin, driver, rider)")
+@Api(description = "Ride request information")
 @RequestMapping("/api/riderequests")
 @RestController
 public class RideRequestController extends ApiController {
@@ -50,13 +50,14 @@ public class RideRequestController extends ApiController {
 
     @ApiOperation(value = "Get a list of all ride requests for current rider")
     @PreAuthorize("hasRole('ROLE_RIDER')")
-    @GetMapping("/all_rider")
+    @GetMapping("/all/rider")
     public ResponseEntity<String> rideRequestsRider(
-        @ApiParam(name="userid", type="Long", value="userid of the rider", example="123", required=true) @RequestParam Long userid
         )
         throws JsonProcessingException {
 
-        Iterable<RideRequest> rideRequests = rideRequestRepository.findAllByUserid(userid);
+        Long userId = getCurrentUser().getUser().getId();
+
+        Iterable<RideRequest> rideRequests = rideRequestRepository.findAllByRiderId(userId);
         String body = mapper.writeValueAsString(rideRequests);
         return ResponseEntity.ok().body(body);
     }
@@ -65,28 +66,27 @@ public class RideRequestController extends ApiController {
     @PreAuthorize("hasRole('ROLE_RIDER')")
     @PostMapping("/post")
     public RideRequest postRideRequest(
-        @ApiParam(name="userid", type="Long", value="userid of the rider", example="123", required=true)  @RequestParam Long userid,
         @ApiParam(name="day", type="String", value="day, one of [Monday, Tuesday,..., Sunday]", example="Monday", required=true) @RequestParam String day,
-        @ApiParam(name="fullName", type="String", value="name of the rider", example="Joe", required=true) @RequestParam String fullName,
         @ApiParam(name="course", type="String", value="course to attend", example="CS 156", required=true) @RequestParam String course,
         @ApiParam(name="startTime", type="String", value="start time, format: HH:MM XM", example="12:00 AM", required=true) @RequestParam String startTime,
         @ApiParam(name="stopTime", type="String", value="stop time, format: HH:MM XM", example="12:00 AM", required=true) @RequestParam String stopTime,
         @ApiParam(name="building", type="String", value="destination building", example="Phelps", required=true) @RequestParam String building,
-        @ApiParam(name="room", type="String", value="destination room", example="EUCR, 3525", required=true) @RequestParam String room,
-        @ApiParam(name="pickup", type="String", value="pickup location", example="San Rafael Hall", required=true) @RequestParam String pickup
+        @ApiParam(name="room", type="String", value="destination room", example="EUCR", required=true) @RequestParam String room,
+        @ApiParam(name="pickupLocation", type="String", value="pickup location", example="San Rafael Hall", required=true) @RequestParam String pickupLocation
         )
         throws JsonProcessingException {
 
+        Long userId = getCurrentUser().getUser().getId();
+
         RideRequest rideRequest = new RideRequest();
-        rideRequest.setUserid(userid);
+        rideRequest.setRiderId(userId);
         rideRequest.setDay(day);
-        rideRequest.setFullName(fullName);
         rideRequest.setCourse(course);
         rideRequest.setStartTime(startTime);
         rideRequest.setStopTime(stopTime);
         rideRequest.setBuilding(building);
         rideRequest.setRoom(room);
-        rideRequest.setPickup(pickup);
+        rideRequest.setPickupLocation(pickupLocation);
 
         RideRequest saved = rideRequestRepository.save(rideRequest);
 

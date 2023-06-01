@@ -76,10 +76,11 @@ public class UsersController extends ApiController {
     public Object toggleAdmin( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-
-        user.setAdmin(!user.getAdmin());
+        boolean oldAdminStatus = user.isAdmin();
+        user.setAdmin(!user.isAdmin());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled admin status".formatted(id));
+        String status = oldAdminStatus ? "true to false" : "false to true";
+        return genericMessage("User with id %s has toggled admin status from %s".formatted(id, status));
     }
 
       
@@ -89,10 +90,24 @@ public class UsersController extends ApiController {
     public Object toggleDriver( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-
-        user.setDriver(!user.getDriver());
+        boolean oldDriverStatus = user.isDriver();
+        user.setDriver(!user.isDriver());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled driver status".formatted(id));
+        String status = oldDriverStatus ? "true to false" : "false to true";
+        return genericMessage("User with id %s has toggled driver status from %s".formatted(id, status));
+    }
+
+    @ApiOperation(value = "Toggle the Rider field")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/toggleRider")
+    public Object toggleRider( @ApiParam("id") @RequestParam Long id){
+        User user = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(User.class, id));
+        boolean oldRiderStatus = user.isRider();
+        user.setRider(!user.isRider());
+        userRepository.save(user);
+        String status = oldRiderStatus ? "true to false" : "false to true";
+        return genericMessage("User with id %s has toggled rider status from %s".formatted(id, status));
     }
 
 }

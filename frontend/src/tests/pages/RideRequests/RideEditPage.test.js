@@ -3,7 +3,7 @@
 import { fireEvent, queryByTestId, render, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
-import BookEditPage from "main/pages/Books/BookEditPage";
+import RideEditPage from "main/pages/Rides/RideEditPage";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";

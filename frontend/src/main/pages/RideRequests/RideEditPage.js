@@ -16,7 +16,7 @@ export default function RidesEditPage() {
       [`/api/books?id=${id}`],
       {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
         method: "GET",
-        url: `/api/rides`,
+        url: `/api/RidesRequests`,
         params: {
           id
         }
@@ -25,7 +25,7 @@ export default function RidesEditPage() {
 
 
   const objectToAxiosPutParams = (Ride) => ({
-    url: "/api/rides",
+    url: "/api/RidesRequests",
     method: "PUT",
     params: {
       id: Ride.id,
@@ -59,7 +59,7 @@ export default function RidesEditPage() {
   }
 
   if (isSuccess) {
-    return <Navigate to="/Rides/list" />
+    return <Navigate to="/RidesRequests/list" />
   }
 
   return (

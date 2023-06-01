@@ -28,4 +28,7 @@ public class RideRequest {
   private String room;
   private String pickupLocation;
 
+  @ManyToOne
+  @JoinColumn(name="user_id")
+  private User user;
 }

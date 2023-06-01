@@ -58,6 +58,10 @@ public class RideRequestController extends ApiController {
         Long userId = getCurrentUser().getUser().getId();
 
         Iterable<RideRequest> rideRequests = rideRequestRepository.findAllByRiderId(userId);
+        for (RideRequest rr : rideRequests){
+            rr = rr+getCurrentUser().getUser().getFullName();
+        }
+
         String body = mapper.writeValueAsString(rideRequests);
         return ResponseEntity.ok().body(body);
     }

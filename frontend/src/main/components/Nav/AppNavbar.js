@@ -15,10 +15,11 @@ export default function AppNavbar({ currentUser, systemInfo, doLogout, currentUr
       }
       <Navbar expand="xl" variant="dark" bg="dark" sticky="top" data-testid="AppNavbar">
         <Container>
-          <img src={headerImg} style={{
+          <img data-testid="AppNavImage" src={headerImg} style={{
             width:80,
             height: 80,
             marginRight: 10}}/>
+            
           <Navbar.Brand as={Link} to="/">
             GauchoRide
           </Navbar.Brand>

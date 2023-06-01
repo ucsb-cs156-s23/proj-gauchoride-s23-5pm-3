@@ -76,11 +76,9 @@ public class UsersController extends ApiController {
     public Object toggleAdmin( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-        boolean oldAdminStatus = user.getAdmin();
         user.setAdmin(!user.getAdmin());
         userRepository.save(user);
-        String status = oldAdminStatus ? "true to false" : "false to true";
-        return genericMessage("User with id %s has toggled admin status from %s".formatted(id, status));
+        return genericMessage("User with id %s has toggled admin status".formatted(id));
     }
 
       
@@ -90,11 +88,9 @@ public class UsersController extends ApiController {
     public Object toggleDriver( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-        boolean oldDriverStatus = user.getDriver();
         user.setDriver(!user.getDriver());
         userRepository.save(user);
-        String status = oldDriverStatus ? "true to false" : "false to true";
-        return genericMessage("User with id %s has toggled driver status from %s".formatted(id, status));
+        return genericMessage("User with id %s has toggled driver status".formatted(id));
     }
 
     @ApiOperation(value = "Toggle the Rider field")
@@ -103,11 +99,9 @@ public class UsersController extends ApiController {
     public Object toggleRider( @ApiParam("id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-        boolean oldRiderStatus = user.getRider();
         user.setRider(!user.getRider());
         userRepository.save(user);
-        String status = oldRiderStatus ? "true to false" : "false to true";
-        return genericMessage("User with id %s has toggled rider status from %s".formatted(id, status));
+        return genericMessage("User with id %s has toggled rider status".formatted(id));
     }
 
 }

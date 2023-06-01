@@ -16,7 +16,7 @@ export default function UsersTable({ users}) {
 
     function cellToAxiosParamsToggleDriver(cell){
         return {
-            url: "/api/driver/users/toggleDriver", // going to have to add api/driver
+            url: "/api/admin/users/toggleDriver", // going to have to add api/driver
             method:  "POST",
             params: {
                 id: cell.row.values.id
@@ -34,7 +34,7 @@ export default function UsersTable({ users}) {
     const toggleDriverMutation = useBackendMutation(
         cellToAxiosParamsToggleDriver,
         {},
-        ["/api/driver/users"] // going to have to add this
+        ["/api/admin/users"] 
 
     );
 
@@ -42,7 +42,7 @@ export default function UsersTable({ users}) {
 
     // Stryker disable next-line all : TODO try to make a good test for this
     const toggleAdminCallback = async (cell) => { toggleAdminMutation.mutate(cell); }
-    const toggleDriverCallback = async (cell) => {toggleDriverMutation.mutate(cell); }
+    const toggleDriverCallback = async (cell) => { toggleDriverMutation.mutate(cell); }
 
 
     const columns = [

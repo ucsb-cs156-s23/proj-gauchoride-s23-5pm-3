@@ -23,5 +23,4 @@ public class DriverShift {
   private String day; // format: one of [Monday, Tuesday,..., Sunday]
   private String startTime; // format: "HH:MM XM"
   private String stopTime; // format: "HH:MM XM"
-  private String backupDriver;
 }

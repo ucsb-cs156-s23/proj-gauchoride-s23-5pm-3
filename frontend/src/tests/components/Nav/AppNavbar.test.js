@@ -70,7 +70,7 @@ describe("AppNavbar tests", () => {
 
         const doLogin = jest.fn();
 
-        render(
+        const {findByTestId} = render(
             <QueryClientProvider client={queryClient}>
                 <MemoryRouter>
                     <AppNavbar currentUser={currentUser} systemInfo={systemInfo} doLogin={doLogin} />
@@ -78,7 +78,7 @@ describe("AppNavbar tests", () => {
             </QueryClientProvider>
         );
 
-       // await waitFor(() => expect(findByTestId("AppNavImage")).toHaveAttribute('style', 'width: 80px; height: 80px; margin-right: 10px;'));
+       expect(await findByTestId("AppNavImage")).toHaveAttribute('style', 'width: 80px; height: 80px; margin-right: 10px;');
         
     });
 

@@ -11,16 +11,16 @@ describe("Footer tests", () => {
         await waitFor(() => expect(getByText(/This is a sample webapp using React with a Spring Boot backend./)).toBeInTheDocument());
     });
 
-    // test("Links are correct", async () => {
-    //     render(<Footer />)
+    test("Links are correct", async () => {
+        const {getByTestId} = render(<Footer />)
     
-    //     await waitFor(()=> expect(getByTestId("footerLink")).toHaveAttribute(
-    //       "href",
-    //       "https://www.as.ucsb.edu/sticker-packs"
+        await waitFor(()=> expect(getByTestId("footerLink")).toHaveAttribute(
+          "href",
+          "https://www.as.ucsb.edu/sticker-packs"
 
-    //     ));
+        ));
     
-    //   });
+      });
 
 });
 

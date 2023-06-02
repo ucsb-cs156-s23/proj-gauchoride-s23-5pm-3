@@ -15,9 +15,9 @@ export default function AppNavbar({ currentUser, systemInfo, doLogout, currentUr
       }
       <Navbar expand="xl" variant="dark" bg="dark" sticky="top" data-testid="AppNavbar">
         <Container>
-          <img data-testid="AppNavImage" src={headerImg} style={{
-            width:80,
-            height: 80,
+          <img data-testid="AppNavImage" src={headerImg} alt="" style={{
+            width:65,
+            height: 65,
             marginRight: 10}}/>
             
           <Navbar.Brand as={Link} to="/">

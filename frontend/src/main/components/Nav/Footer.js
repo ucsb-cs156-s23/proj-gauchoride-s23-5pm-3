@@ -9,7 +9,7 @@ export default function Footer() {
         <p>
           This is a sample webapp using React with a Spring Boot backend.
         </p>
-
+      {/*This reference description I got it from the https://github.com/ucsb-cs156/proj-courses repo*/}
         <p>
           The cartoon Storke Tower images in the brand logo and favicon for this site were
           developed by Chelsea Lyon-Hayden, Art Director for UCSB Associate Students, and are

@@ -1,8 +1,12 @@
 import { render, waitFor } from "@testing-library/react";
-import Footer from "main/components/Nav/Footer";
+import Footer,{space} from "main/components/Nav/Footer";
 
 describe("Footer tests", () => {
 
+  //Test taken from the https://github.com/ucsb-cs156/proj-courses repo
+    test("space stands for a space", () => {
+    expect(space).toBe(" ");
+    });
 
     test("renders correctly ", async () => {
         const { getByText } = render(

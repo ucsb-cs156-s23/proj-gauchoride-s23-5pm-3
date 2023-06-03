@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -32,9 +36,6 @@ public class User {
   private boolean driver;
   private boolean rider;
 
-// https://stackoverflow.com/questions/52555323/hibernate-fetch-only-a-specific-field-for-manytoone-relation-do-not-embed-full
-// https://stackoverflow.com/questions/67055725/how-to-retrieve-only-a-specific-field-from-child-entity-on-onetoone-relationshi
-// https://stackoverflow.com/questions/49284556/how-to-fetch-only-some-fields-of-an-entity-having-associations-using-hibernate-q
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy="user", fetch=FetchType.LAZY)
   private List<RideRequest> rideRequests;
 }

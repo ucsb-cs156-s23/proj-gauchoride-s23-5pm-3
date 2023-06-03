@@ -1,5 +1,6 @@
 package edu.ucsb.cs156.gauchoride.controllers;
 
+import edu.ucsb.cs156.gauchoride.entities.User;
 import edu.ucsb.cs156.gauchoride.repositories.UserRepository;
 import edu.ucsb.cs156.gauchoride.ControllerTestCase;
 import edu.ucsb.cs156.gauchoride.entities.RideRequest;
@@ -41,8 +42,9 @@ public class RideRequestControllerTests extends ControllerTestCase {
 	@MockBean
 	UserRepository userRepository;
 
+    User u1 = User.builder().id(1L).build();
     RideRequest r1 = RideRequest.builder()
-        .riderId(1L)
+        .rider(u1)
         .day("Monday")
         .course("ART 1")
         .startTime("12AM")
@@ -52,8 +54,9 @@ public class RideRequestControllerTests extends ControllerTestCase {
         .pickupLocation("asap")
         .build();
 
+    User u2 = User.builder().id(2L).build();
     RideRequest r2 = RideRequest.builder()
-        .riderId(2L)
+        .rider(u2)
         .day("Monday")
         .course("ART 1")
         .startTime("12AM")
@@ -82,7 +85,6 @@ public class RideRequestControllerTests extends ControllerTestCase {
     mockMvc.perform(get("/api/riderequests/all/rider"))
         .andExpect(status().is(403));
     }
-
 
     @WithMockUser(roles = { "ADMIN", "DRIVER" })
     @Test
@@ -127,18 +129,32 @@ public class RideRequestControllerTests extends ControllerTestCase {
         verify(rideRequestRepository, times(1)).findAllByRiderId(1L);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
-
+        
     }
 
 	@WithMockUser(roles = { "RIDER" })
 	@Test
 	public void rider_post() throws Exception {
 
-        when(rideRequestRepository.save(eq(r1))).thenReturn(r1);
+        User u = currentUserService.getCurrentUser().getUser();
+        RideRequest r3 = RideRequest.builder()
+            .rider(u)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+
+        when(rideRequestRepository.save(eq(r3))).thenReturn(r3);
 
         // act
+        String expectedUserString = mapper.writeValueAsString(u);
         MvcResult response = mockMvc.perform(
             post("/api/riderequests/post")
+            .param("user", expectedUserString)
             .param("day", "Monday")
             .param("course", "ART 1")
             .param("startTime", "12AM")
@@ -150,8 +166,8 @@ public class RideRequestControllerTests extends ControllerTestCase {
             .andExpect(status().isOk()).andReturn();
 
         // assert
-        verify(rideRequestRepository, times(1)).save(r1);
-        String expectedJson = mapper.writeValueAsString(r1);
+        verify(rideRequestRepository, times(1)).save(r3);
+        String expectedJson = mapper.writeValueAsString(r3);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
 	}

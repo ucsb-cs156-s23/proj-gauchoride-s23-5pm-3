@@ -3,6 +3,7 @@ package edu.ucsb.cs156.gauchoride.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.ucsb.cs156.gauchoride.entities.User;
 import edu.ucsb.cs156.gauchoride.entities.RideRequest;
 import edu.ucsb.cs156.gauchoride.repositories.RideRequestRepository;
 
@@ -58,9 +59,6 @@ public class RideRequestController extends ApiController {
         Long userId = getCurrentUser().getUser().getId();
 
         Iterable<RideRequest> rideRequests = rideRequestRepository.findAllByRiderId(userId);
-        for (RideRequest rr : rideRequests){
-            rr = rr+getCurrentUser().getUser().getFullName();
-        }
 
         String body = mapper.writeValueAsString(rideRequests);
         return ResponseEntity.ok().body(body);
@@ -80,10 +78,10 @@ public class RideRequestController extends ApiController {
         )
         throws JsonProcessingException {
 
-        Long userId = getCurrentUser().getUser().getId();
+		User user = getCurrentUser().getUser();
 
         RideRequest rideRequest = new RideRequest();
-        rideRequest.setRiderId(userId);
+		rideRequest.setRider(user);
         rideRequest.setDay(day);
         rideRequest.setCourse(course);
         rideRequest.setStartTime(startTime);

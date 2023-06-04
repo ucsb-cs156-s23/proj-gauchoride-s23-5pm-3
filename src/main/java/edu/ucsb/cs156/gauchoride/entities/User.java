@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,5 +35,7 @@ public class User {
   private boolean admin;
   private boolean driver;
   private boolean rider;
-  
+
+  @OneToMany(mappedBy="user", fetch=FetchType.LAZY)
+  private List<RideRequest> rideRequests;
 }

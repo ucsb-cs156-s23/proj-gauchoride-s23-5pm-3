@@ -64,7 +64,23 @@ describe("AppNavbar tests", () => {
         expect(swaggerMenu).toBeInTheDocument();        
     });
 
+    test("renders image correctly", async () => {
+        const currentUser = currentUserFixtures.adminUser;
+        const systemInfo = systemInfoFixtures.showingBoth;
 
+        const doLogin = jest.fn();
+
+        const {findByTestId} = render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <AppNavbar currentUser={currentUser} systemInfo={systemInfo} doLogin={doLogin} />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+       expect(await findByTestId("AppNavImage")).toHaveAttribute('style', 'width: 65px; height: 65px; margin-right: 10px;');
+        
+    });
 
     test("renders the AppNavbarLocalhost when on http://localhost:3000", async () => {
 

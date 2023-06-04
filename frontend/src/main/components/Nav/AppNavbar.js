@@ -2,6 +2,8 @@ import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
 import AppNavbarLocalhost from "main/components/Nav/AppNavbarLocalhost"
+import headerImg from "../../../assets/Header_logo_Storke.png"
+
 
 export default function AppNavbar({ currentUser, systemInfo, doLogout, currentUrl = window.location.href }) {
   return (
@@ -13,6 +15,11 @@ export default function AppNavbar({ currentUser, systemInfo, doLogout, currentUr
       }
       <Navbar expand="xl" variant="dark" style={{ backgroundColor: "#003660" }} sticky="top" data-testid="AppNavbar">
         <Container>
+          <img data-testid="AppNavImage" src={headerImg} alt="" style={{
+            width:65,
+            height: 65,
+            marginRight: 10}}/>
+            
           <Navbar.Brand as={Link} to="/">
             GauchoRide
           </Navbar.Brand>

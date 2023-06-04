@@ -83,6 +83,39 @@ describe("RideEditPage tests", () => {
                 email: "jasonvu@ucsb.edu",
                 admin: "true",
                 driver: "false"
+
+                /*
+                day:
+                course:
+                start: 
+                stop: 
+                setRoom: 
+                pickup: 
+
+            .riderId(1L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+
+            .riderId(1L)
+            .day("Tuesday")
+            .course("ART 2")
+            .startTime("1AM")
+            .stopTime("1AM")
+            .building("Girvetz")
+            .room("1004")
+            .pickupLocation("ASAP")
+            .build();
+
+
+                */
+
+
             });
             axiosMock.onPut('/api/RideRequests').reply(200, {
                 id: 1,

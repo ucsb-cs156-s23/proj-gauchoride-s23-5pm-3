@@ -84,6 +84,8 @@ describe("AppNavbar tests", () => {
         );
 
         await waitFor(() => expect(getByTestId("AppNavbarLocalhost")).toBeInTheDocument());
+        const navbar = getByTestId('AppNavbar');
+        expect(navbar).toHaveStyle('background-color: #003660');
     });
 
     test("renders the AppNavbarLocalhost when on http://127.0.0.1:3000", async () => {
@@ -104,6 +106,9 @@ describe("AppNavbar tests", () => {
         );
 
         await waitFor(() => expect(getByTestId("AppNavbarLocalhost")).toBeInTheDocument());
+        const navbar = getByTestId('AppNavbar');
+        expect(navbar).toHaveStyle('background-color: #003660');
+
     });
 
     test("renders the AppNavbarLocalhost when on http://127.0.0.1:3000", async () => {
@@ -124,6 +129,9 @@ describe("AppNavbar tests", () => {
         );
 
         await waitFor(() => expect(getByTestId("AppNavbarLocalhost")).toBeInTheDocument());
+        const navbar = getByTestId('AppNavbar');
+        expect(navbar).toHaveStyle('background-color: #003660');
+
 
     });
 

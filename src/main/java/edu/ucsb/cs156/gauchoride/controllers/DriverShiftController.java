@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.ucsb.cs156.gauchoride.entities.DriverShift;
+import edu.ucsb.cs156.gauchoride.repositories.DriverShiftProjection;
 import edu.ucsb.cs156.gauchoride.repositories.DriverShiftRepository;
 
 import edu.ucsb.cs156.gauchoride.entities.User;
@@ -43,7 +44,7 @@ public class DriverShiftController extends ApiController {
     @GetMapping("/all")
     public ResponseEntity<String> allDriverShifts()
             throws JsonProcessingException {
-        Iterable<DriverShift> driverShifts = driverShiftRepository.findAll();
+        Iterable<DriverShiftProjection> driverShifts = driverShiftRepository.getAll();
         String body = mapper.writeValueAsString(driverShifts);
         return ResponseEntity.ok().body(body);
     }

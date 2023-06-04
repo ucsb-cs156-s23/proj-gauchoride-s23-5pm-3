@@ -74,6 +74,7 @@ export default function UsersTable({ users}) {
     ];
 
     const buttonColumn = [
+        // shows all the text columns, and then the button columns
         ...columns,
         ButtonColumn("toggle-admin", "primary", toggleAdminCallback, "UsersTable"),
         ButtonColumn("toggle-driver", "primary", toggleDriverCallback, "UsersTable"),

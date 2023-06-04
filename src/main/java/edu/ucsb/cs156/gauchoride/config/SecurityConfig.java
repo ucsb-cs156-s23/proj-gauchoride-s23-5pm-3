@@ -89,6 +89,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
           }
           
+          Optional<User> u = userRepository.findByEmail(email);
+          if (u.isPresent() && u.get().getDriver()) {
+            mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+          } 
+          if (u.isPresent() && u.get().getRider()) {
+            mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_RIDER"));
+          }
+
         }
 
       });

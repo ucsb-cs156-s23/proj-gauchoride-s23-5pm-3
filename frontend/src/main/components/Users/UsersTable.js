@@ -14,9 +14,10 @@ export default function UsersTable({ users}) {
         }
     }
 
+    // toggleDriver return
     function cellToAxiosParamsToggleDriver(cell){
         return {
-            url: "/api/admin/users/toggleDriver", // going to have to add api/driver
+            url: "/api/admin/users/toggleDriver", 
             method:  "POST",
             params: {
                 id: cell.row.values.id

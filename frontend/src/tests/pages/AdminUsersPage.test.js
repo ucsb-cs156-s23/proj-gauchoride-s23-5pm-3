@@ -68,6 +68,8 @@ describe("AdminUsersPage tests", () => {
 
     });
 
+    // toggle admin test cases
+
     test("usertable toggle admin tests", async ()=>{
         setupAdminUser();
         const queryClient = new QueryClient();
@@ -93,6 +95,8 @@ describe("AdminUsersPage tests", () => {
       
 
     })
+
+    // Toggle Driver test cases
 
     test("usertable toggle driver tests", async ()=>{
         setupAdminUser();

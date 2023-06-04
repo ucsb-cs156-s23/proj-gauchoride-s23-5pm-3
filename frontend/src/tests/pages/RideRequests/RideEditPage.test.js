@@ -77,16 +77,20 @@ describe("RideEditPage tests", () => {
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
             axiosMock.onGet("/api/RideRequsts", { params: { id: 17 } }).reply(200, {
-                id: 17,
-                title: 'IT',
-                author: "Stephen King",
-                genre: "Horror"
+                id: 1,
+                givenName: "Jason",
+                familyName: "Vu",
+                email: "jasonvu@ucsb.edu",
+                admin: "true",
+                driver: "false"
             });
             axiosMock.onPut('/api/RideRequests').reply(200, {
-                id: "17",
-                title: 'IT2',
-                author: "Stephen King2",
-                genre: "Horror2"
+                id: 1,
+                givenName: "Phill",
+                familyName: "Conrad",
+                email: "phtcon@ucsb.edu",
+                admin: "true",
+                driver: "false"
             });
         });
 
@@ -95,7 +99,7 @@ describe("RideEditPage tests", () => {
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <BookEditPage />
+                        <RideEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
@@ -106,23 +110,27 @@ describe("RideEditPage tests", () => {
             const { getByTestId, findByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <BookEditPage />
+                        <RideEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
 
-            await findByTestId("BookForm-title");
+            await findByTestId("RideForm-givenName");
 
-            const idField = getByTestId("BookForm-id");
-            const titleField = getByTestId("BookForm-title");
-            const authorField = getByTestId("BookForm-author");
-            const genreField = getByTestId("BookForm-genre");
-            const submitButton = getByTestId("BookForm-submit");
+            const idField = getByTestId("RideForm-id");
+            const givenNameField = getByTestId("RideForm-givenName");
+            const familyNameField = getByTestId("RideForm-familyName");
+            const emailField = getByTestId("RideForm-email");
+            const adminField = getByTestId("RideForm-admin");
+            const driverField = getByTestId("RideForm-driver");
+            // const submitButton = getByTestId("RideForm-submit");
 
-            expect(idField).toHaveValue("17");
-            expect(titleField).toHaveValue("IT");
-            expect(authorField).toHaveValue("Stephen King");
-            expect(genreField).toHaveValue("Horror");
+            expect(idField).toHaveValue("1");
+            expect(givenNameField).toHaveValue("Jason");
+            expect(familyNameField).toHaveValue("Vu");
+            expect(emailField).toHaveValue("jasonvu@ucsb.edu");
+            expect(adminField).toHaveValue("true");
+            expect(driverField).toHaveValue("false");
         });
 
         test("Changes when you click Update", async () => {
@@ -132,42 +140,51 @@ describe("RideEditPage tests", () => {
             const { getByTestId, findByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <BookEditPage />
+                        <RideEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
 
-            await findByTestId("BookForm-title");
+            await findByTestId("RideForm-givenName");
 
-            const idField = getByTestId("BookForm-id");
-            const titleField = getByTestId("BookForm-title");
-            const authorField = getByTestId("BookForm-author");
-            const genreField = getByTestId("BookForm-genre");
-            const submitButton = getByTestId("BookForm-submit");
+            const idField = getByTestId("RideForm-id");
+            const givenNameField = getByTestId("RideForm-givenName");
+            const familyNameField = getByTestId("RideForm-familyName");
+            const emailField = getByTestId("RideForm-email");
+            const adminField = getByTestId("RideForm-admin");
+            const driverField = getByTestId("RideForm-driver");
+            const submitButton = getByTestId("RideForm-submit");
 
-            expect(idField).toHaveValue("17");
-            expect(titleField).toHaveValue("IT");
-            expect(authorField).toHaveValue("Stephen King");
-            expect(genreField).toHaveValue("Horror");
+            expect(idField).toHaveValue("1");
+            expect(givenNameField).toHaveValue("Jason");
+            expect(familyNameField).toHaveValue("Vu");
+            expect(emailField).toHaveValue("jasonvu@ucsb.edu");
+            expect(adminField).toHaveValue("true");
+            expect(driverField).toHaveValue("false");
 
             expect(submitButton).toBeInTheDocument();
 
-            fireEvent.change(titleField, { target: { value: 'IT2' } })
-            fireEvent.change(authorField, { target: { value: 'Stephen King2' } })
-            fireEvent.change(genreField, { target: { value: "Horror2" } })
+            fireEvent.change(givenNameField, { target: { value: 'Phill' } })
+            fireEvent.change(familyNameField, { target: { value: 'Conrad' } })
+            fireEvent.change(emailField, { target: { value: "phtcon@ucsb.edu" } })
+            fireEvent.change(adminField, { target: { value: "false" } })
+            fireEvent.change(driverField, { target: { value: "true" } })
 
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled);
-            expect(mockToast).toBeCalledWith("Book Updated - id: 17 title: IT2 author: Stephen King2 genre: Horror2");
-            expect(mockNavigate).toBeCalledWith({ "to": "/Books/list" });
+            expect(mockToast).toBeCalledWith("Ride Updated - id: 1 givenName: Phill familyName: Conrad email: phtcon@ucsb.edu adminField = false driverField = true");
+            expect(mockNavigate).toBeCalledWith({ "to": "/RideRequests/list" });
 
             expect(axiosMock.history.put.length).toBe(1); // times called
-            expect(axiosMock.history.put[0].params).toEqual({ id: 17 });
+            expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                title: 'IT2',
-                author: "Stephen King2",
-                genre: "Horror2"
+                givenName: "Phill",
+                familyName: "Conrad",
+                email: "phtcon@ucsb.edu",
+                admin: "false",
+                driver: "true"
+
             })); // posted object
 
         });
@@ -252,8 +269,8 @@ describe("RideEditPage tests", () => {
                 givenName: "Phill",
                 familyName: "Conrad",
                 email: "phtcon@ucsb.edu",
-                admin: "true",
-                driver: "false"
+                admin: "false",
+                driver: "true"
             }
         });
 

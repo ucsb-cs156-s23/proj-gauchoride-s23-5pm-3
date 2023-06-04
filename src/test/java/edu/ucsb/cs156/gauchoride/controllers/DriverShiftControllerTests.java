@@ -3,6 +3,7 @@ package edu.ucsb.cs156.gauchoride.controllers;
 import edu.ucsb.cs156.gauchoride.repositories.UserRepository;
 import edu.ucsb.cs156.gauchoride.ControllerTestCase;
 import edu.ucsb.cs156.gauchoride.entities.DriverShift;
+import edu.ucsb.cs156.gauchoride.repositories.DriverShiftProjection;
 import edu.ucsb.cs156.gauchoride.repositories.DriverShiftRepository;
 import edu.ucsb.cs156.gauchoride.testconfig.TestConfig;
 import edu.ucsb.cs156.gauchoride.entities.User;
@@ -13,10 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.FlashAttributeResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,10 +26,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.http.MediaType;
 
 @WebMvcTest(controllers = DriverShiftController.class)
 @Import(TestConfig.class)
@@ -53,25 +48,35 @@ public class DriverShiftControllerTests extends ControllerTestCase {
   public void driverShifts_succ() throws Exception {
 
     // arrange
-    User u = User.builder().id(1L).build();
+	DriverShiftProjection dsp1 = new DriverShiftProjection() {
+		public long getId(){return 1L;}
+		public String getDay(){return "Monday";}
+		public String getStartTime(){return "12:00 PM";}
+		public String getStopTime(){return "3:00 PM";}
+		public UserProjection getDriver(){
+			return new UserProjection() {
+				public long getId(){return 1L;}
+				public String getFullName(){return "Fake Name";}
+			};
+		}
+	};
+	DriverShiftProjection dsp2 = new DriverShiftProjection() {
+		public long getId(){return 2L;}
+		public String getDay(){return "Tuesday";}
+		public String getStartTime(){return "12:00 PM";}
+		public String getStopTime(){return "3:00 PM";}
+		public UserProjection getDriver(){
+			return new UserProjection() {
+				public long getId(){return 1L;}
+				public String getFullName(){return "Fake Name";}
+			};
+		}
+	};
 
-    DriverShift d1 = DriverShift.builder()
-        .day("Monday")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .driver(u)
-        .build();
-    DriverShift d2 = DriverShift.builder()
-        .day("Monday")
-        .startTime("12AM")
-        .stopTime("12AM")
-        .driver(u)
-        .build();
+    ArrayList<DriverShiftProjection> expectedDriverShifts = new ArrayList<>();
+    expectedDriverShifts.addAll(Arrays.asList(dsp1,dsp2));
 
-    ArrayList<DriverShift> expectedDriverShifts = new ArrayList<>();
-    expectedDriverShifts.addAll(Arrays.asList(d1, d2));
-
-    when(driverShiftRepository.findAll()).thenReturn(expectedDriverShifts);
+    when(driverShiftRepository.getAll()).thenReturn(expectedDriverShifts);
     String expectedJson = mapper.writeValueAsString(expectedDriverShifts);
 
     // act
@@ -81,7 +86,7 @@ public class DriverShiftControllerTests extends ControllerTestCase {
 
     // assert
 
-    verify(driverShiftRepository, times(1)).findAll();
+    verify(driverShiftRepository, times(1)).getAll();
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
 

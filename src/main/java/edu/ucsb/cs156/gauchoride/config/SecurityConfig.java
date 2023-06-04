@@ -96,6 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           if (u.isPresent() && u.get().getRider()) {
             mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_RIDER"));
           }
+
         }
 
       });

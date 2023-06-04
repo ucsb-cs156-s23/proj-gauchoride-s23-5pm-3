@@ -39,9 +39,7 @@ export default function UsersTable({ users}) {
 
     );
 
-    // Stryker enable all 
-
-    // Stryker disable next-line all : TODO try to make a good test for this
+    // Stryker restore all 
     const toggleAdminCallback = async (cell) => { toggleAdminMutation.mutate(cell); }
     const toggleDriverCallback = async (cell) => { toggleDriverMutation.mutate(cell); }
 
@@ -49,7 +47,7 @@ export default function UsersTable({ users}) {
     const columns = [
         {
             Header: 'id',
-            accessor: 'id', // accessor is the "key" in the data
+            accessor: 'id', 
         },
         {
             Header: 'First Name',
@@ -71,7 +69,7 @@ export default function UsersTable({ users}) {
         {
             Header: 'Driver',
             id: 'driver',
-            accessor: (row, _rowIndex) => String(row.driver) // hack needed for boolean values to show up
+            accessor: (row, _rowIndex) => String(row.driver) 
         }
     ];
 
@@ -79,9 +77,7 @@ export default function UsersTable({ users}) {
         ...columns,
         ButtonColumn("toggle-admin", "primary", toggleAdminCallback, "UsersTable"),
         ButtonColumn("toggle-driver", "primary", toggleDriverCallback, "UsersTable"),
-    ]
-
-    //const columnsToDisplay = showButtons ? buttonColumn : columns;
+    ]   
 
     return <OurTable
         data={users}

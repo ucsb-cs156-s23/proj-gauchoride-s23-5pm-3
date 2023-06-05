@@ -91,12 +91,12 @@ public class RideRequestController extends ApiController {
         return rideRequest;
     }
 
-	  @ApiOperation(value = "Update a ride request (rider)")
+	@ApiOperation(value = "Update a ride request (rider)")
     @PreAuthorize("hasRole('ROLE_RIDER')")
     @PutMapping("/put/rider")
     public RideRequest updateRideRequest_Rider(
-            @ApiParam("id") @RequestParam Long id,
-            @RequestBody @Valid RideRequest incoming) {
+        @ApiParam("id") @RequestParam Long id,
+        @RequestBody @Valid RideRequest incoming) {
 
 		Long userId = getCurrentUser().getUser().getId();
 
@@ -118,5 +118,5 @@ public class RideRequestController extends ApiController {
 		}else{
 			throw new AccessDeniedException("403 returned"); 
 		}
-
+    }
 }

@@ -76,9 +76,11 @@ import io.swagger.annotations.ApiParam;
     public Object toggleAdmin( @ApiParam(&quot;id&quot;) @RequestParam Long id){
 <span class="fc" id="L77">        User user = userRepository.findById(id)</span>
 <span class="fc" id="L78">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, id));</span>
-<span class="fc bfc" id="L79" title="All 2 branches covered.">        user.setAdmin(!user.getAdmin());</span>
-<span class="fc" id="L80">        userRepository.save(user);</span>
-<span class="fc" id="L81">        return genericMessage(&quot;User with id %s has toggled admin status&quot;.formatted(id));</span>
+<span class="fc" id="L79">        boolean oldAdminStatus = user.getAdmin();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        user.setAdmin(!user.getAdmin());</span>
+<span class="fc" id="L81">        userRepository.save(user);</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        String status = oldAdminStatus ? &quot;true to false&quot; : &quot;false to true&quot;;</span>
+<span class="fc" id="L83">        return genericMessage(&quot;User with id %s has toggled admin status from %s&quot;.formatted(id, status));</span>
     }
 
       
@@ -86,23 +88,28 @@ import io.swagger.annotations.ApiParam;
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
     @PostMapping(&quot;/toggleDriver&quot;)
     public Object toggleDriver( @ApiParam(&quot;id&quot;) @RequestParam Long id){
-<span class="fc" id="L89">        User user = userRepository.findById(id)</span>
-<span class="fc" id="L90">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, id));</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        user.setDriver(!user.getDriver());</span>
-<span class="fc" id="L92">        userRepository.save(user);</span>
-<span class="fc" id="L93">        return genericMessage(&quot;User with id %s has toggled driver status&quot;.formatted(id));</span>
+<span class="fc" id="L91">        User user = userRepository.findById(id)</span>
+<span class="fc" id="L92">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, id));</span>
+<span class="fc" id="L93">        boolean oldDriverStatus = user.getDriver();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        user.setDriver(!user.getDriver());</span>
+<span class="fc" id="L95">        userRepository.save(user);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        String status = oldDriverStatus ? &quot;true to false&quot; : &quot;false to true&quot;;</span>
+<span class="fc" id="L97">        return genericMessage(&quot;User with id %s has toggled driver status from %s&quot;.formatted(id, status));</span>
     }
 
     @ApiOperation(value = &quot;Toggle the Rider field&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
     @PostMapping(&quot;/toggleRider&quot;)
     public Object toggleRider( @ApiParam(&quot;id&quot;) @RequestParam Long id){
-<span class="fc" id="L100">        User user = userRepository.findById(id)</span>
-<span class="fc" id="L101">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, id));</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        user.setRider(!user.getRider());</span>
-<span class="fc" id="L103">        userRepository.save(user);</span>
-<span class="fc" id="L104">        return genericMessage(&quot;User with id %s has toggled rider status&quot;.formatted(id));</span>
+<span class="fc" id="L104">        User user = userRepository.findById(id)</span>
+<span class="fc" id="L105">        .orElseThrow(() -&gt; new EntityNotFoundException(User.class, id));</span>
+<span class="fc" id="L106">        boolean oldRiderStatus = user.getRider();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        user.setRider(!user.getRider());</span>
+<span class="fc" id="L108">        userRepository.save(user);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        String status = oldRiderStatus ? &quot;true to false&quot; : &quot;false to true&quot;;</span>
+<span class="fc" id="L110">        return genericMessage(&quot;User with id %s has toggled rider status from %s&quot;.formatted(id, status));</span>
     }
+
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

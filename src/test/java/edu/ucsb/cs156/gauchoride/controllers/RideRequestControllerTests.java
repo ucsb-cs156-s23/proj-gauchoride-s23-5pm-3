@@ -39,13 +39,13 @@ public class RideRequestControllerTests extends ControllerTestCase {
     @MockBean
     RideRequestRepository rideRequestRepository;
 
-    @MockBean
-    UserRepository userRepository;
+	@MockBean
+	UserRepository userRepository;
 
-    @WithMockUser(roles = { "ADMIN" })
-    @Test
-	  public void admin_edit() throws Exception {
-        // arrange
+	@WithMockUser(roles = { "ADMIN" })
+	@Test
+	public void admin_delete() throws Exception {
+			
         RideRequest r1 = RideRequest.builder()
             .riderId(1L)
             .day("Monday")
@@ -56,7 +56,139 @@ public class RideRequestControllerTests extends ControllerTestCase {
             .room("3525")
             .pickupLocation("asap")
             .build();
-  
+
+        when(rideRequestRepository.findById(eq(6L))).thenReturn(Optional.of(r1));
+
+        // act
+        MvcResult response = mockMvc.perform(
+            delete("/api/riderequests/delete?id=6")
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(6L);
+        verify(rideRequestRepository, times(1)).delete(any());
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("Ride request with id 6 deleted", json.get("message"));
+	}
+
+	@WithMockUser(roles = { "ADMIN" })
+	@Test
+	public void admin_delete_non_existant()
+        throws Exception {
+        // arrange
+
+        when(rideRequestRepository.findById(eq(10L))).thenReturn(Optional.empty());
+
+        // act
+        MvcResult response = mockMvc.perform(
+            delete("/api/riderequests/delete?id=10")
+                .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(10L);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("RideRequest with id 10 not found", json.get("message"));
+	}
+
+    @WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_delete() throws Exception {
+		
+        RideRequest r1 = RideRequest.builder()
+            .riderId(1L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+   
+        User u1 = User.builder().id(1L).build();
+        when(rideRequestRepository.findById(eq(6L))).thenReturn(Optional.of(r1));
+
+        // act
+        MvcResult response = mockMvc.perform(
+            delete("/api/riderequests/delete/rider?id=6")
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(6L);
+        verify(rideRequestRepository, times(1)).delete(any());
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("Ride request with id 6 deleted", json.get("message"));
+	}
+
+    @WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_delete_non_existant()
+        throws Exception {
+        // arrange
+
+        User u1 = User.builder().id(1L).build();
+        when(rideRequestRepository.findById(eq(10L))).thenReturn(Optional.empty());
+
+        // act
+        MvcResult response = mockMvc.perform(
+            delete("/api/riderequests/delete/rider?id=10")
+                .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(10L);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("RideRequest with id 10 not found", json.get("message"));
+	}
+
+    @WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_delete_unowned_request()
+        throws Exception {
+        // arrange
+
+        RideRequest r2 = RideRequest.builder()
+            .riderId(2L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+   
+        User u1 = User.builder().id(1L).build();
+        when(rideRequestRepository.findById(eq(10L))).thenReturn(Optional.of(r2));
+
+        // act
+        mockMvc.perform(
+            delete("/api/riderequests/delete/rider?id=10")
+                .with(csrf()))
+            .andExpect(status().is(403));
+	}
+
+    @WithMockUser(roles = { "ADMIN" })
+	@Test
+	public void admin_edit() throws Exception {
+        // arrange
+
+        RideRequest r1 = RideRequest.builder()
+            .riderId(1L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+
         RideRequest r2 = RideRequest.builder()
             .riderId(1L)
             .day("Tuesday")
@@ -77,50 +209,20 @@ public class RideRequestControllerTests extends ControllerTestCase {
             put("/api/riderequests/put?id=4")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
-                .content(requestBody)                
-                    .with(csrf()))
-                .andExpect(status().isOk()).andReturn();
-  
+                .content(requestBody)
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
         // assert
         verify(rideRequestRepository, times(1)).findById(4L);
         verify(rideRequestRepository, times(1)).save(r2); // should be saved with updated info
         String responseString = response.getResponse().getContentAsString();
         assertEquals(requestBody, responseString);
-	  }
+	}
 
-    @WithMockUser(roles = { "ADMIN" })
-    @Test
-	  public void admin_delete() throws Exception {
-  
-			  RideRequest r1 = RideRequest.builder()
-            .riderId(1L)
-            .day("Monday")
-            .course("ART 1")
-            .startTime("12AM")
-            .stopTime("12AM")
-            .building("Phelps")
-            .room("3525")
-            .pickupLocation("asap")
-            .build();
-        when(rideRequestRepository.findById(eq(6L))).thenReturn(Optional.of(r1));
-
-        // act
-        MvcResult response = mockMvc.perform(
-            delete("/api/riderequests/delete?id=6")                
-                .with(csrf()))
-            .andExpect(status().isOk()).andReturn();
-
-        // assert
-        verify(rideRequestRepository, times(1)).findById(6L);
-        verify(rideRequestRepository, times(1)).delete(any());
-
-        Map<String, Object> json = responseToJson(response);
-        assertEquals("Ride request with id 6 deleted", json.get("message"));
-	  }
-
-    @WithMockUser(roles = { "ADMIN" })
-    @Test
-	  public void admin_edit_does_not_exist() throws Exception {
+	@WithMockUser(roles = { "ADMIN" })
+	@Test
+	public void admin_edit_does_not_exist() throws Exception {
         // arrange
 
         RideRequest r2 = RideRequest.builder()
@@ -143,39 +245,21 @@ public class RideRequestControllerTests extends ControllerTestCase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(requestBody)
-                    .with(csrf()))
-                .andExpect(status().isNotFound()).andReturn();
-  
+                .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
         // assert
         verify(rideRequestRepository, times(1)).findById(5L);
         Map<String, Object> json = responseToJson(response);
         assertEquals("RideRequest with id 5 not found", json.get("message"));
-    }
-  
-    @WithMockUser(roles = { "ADMIN" })
-    @Test          
-	  public void admin_delete_non_existant()
-        throws Exception {
-        // arrange
 
-        when(rideRequestRepository.findById(eq(10L))).thenReturn(Optional.empty());
-
-        // act
-        MvcResult response = mockMvc.perform(
-            delete("/api/riderequests/delete?id=10")
-                .with(csrf()))
-            .andExpect(status().isNotFound()).andReturn();
-  
-        // assert
-        verify(rideRequestRepository, times(1)).findById(10L);
-        Map<String, Object> json = responseToJson(response);
-        assertEquals("RideRequest with id 10 not found", json.get("message"));
-    }
+	}
 
     @WithMockUser(roles = { "RIDER" })
-	  @Test
-	  public void rider_edit() throws Exception {
+	@Test
+	public void rider_edit() throws Exception {
         // arrange
+
         RideRequest r1 = RideRequest.builder()
             .riderId(1L)
             .day("Monday")
@@ -186,7 +270,7 @@ public class RideRequestControllerTests extends ControllerTestCase {
             .room("3525")
             .pickupLocation("asap")
             .build();
-        
+
         RideRequest r2 = RideRequest.builder()
             .riderId(1L)
             .day("Tuesday")
@@ -209,50 +293,19 @@ public class RideRequestControllerTests extends ControllerTestCase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(requestBody)
-                    .with(csrf()))
-                .andExpect(status().isOk()).andReturn();
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
 
         // assert
         verify(rideRequestRepository, times(1)).findById(4L);
         verify(rideRequestRepository, times(1)).save(r2); // should be saved with updated info
         String responseString = response.getResponse().getContentAsString();
         assertEquals(requestBody, responseString);
-	  }
+	}
 
-    @WithMockUser(roles = { "RIDER" })
-	  @Test
-	  public void rider_delete() throws Exception {
-		    RideRequest r1 = RideRequest.builder()
-            .riderId(1L)
-            .day("Monday")
-            .course("ART 1")
-            .startTime("12AM")
-            .stopTime("12AM")
-            .building("Phelps")
-            .room("3525")
-            .pickupLocation("asap")
-            .build();
-
-        User u1 = User.builder().id(1L).build();
-        when(rideRequestRepository.findById(eq(6L))).thenReturn(Optional.of(r1));
-
-        // act
-        MvcResult response = mockMvc.perform(
-            delete("/api/riderequests/delete/rider?id=6")
-                .with(csrf()))
-            .andExpect(status().isOk()).andReturn();
-
-        // assert
-        verify(rideRequestRepository, times(1)).findById(6L);
-        verify(rideRequestRepository, times(1)).delete(any());
-
-        Map<String, Object> json = responseToJson(response);
-        assertEquals("Ride request with id 6 deleted", json.get("message"));
-	  }
-
-    @WithMockUser(roles = { "RIDER" })
-    @Test
-    public void rider_edit_does_not_exist() throws Exception {
+	@WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_edit_does_not_exist() throws Exception {
         // arrange
 
         RideRequest r2 = RideRequest.builder()
@@ -277,39 +330,19 @@ public class RideRequestControllerTests extends ControllerTestCase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(requestBody)
-                    .with(csrf()))
-                .andExpect(status().isNotFound()).andReturn();
+                .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
 
         // assert
         verify(rideRequestRepository, times(1)).findById(5L);
         Map<String, Object> json = responseToJson(response);
         assertEquals("RideRequest with id 5 not found", json.get("message"));
-    }
+
+	}
 
     @WithMockUser(roles = { "RIDER" })
-    @Test
-    public void rider_delete_non_existant()
-        throws Exception {
-        // arrange
-
-        User u1 = User.builder().id(1L).build();
-        when(rideRequestRepository.findById(eq(10L))).thenReturn(Optional.empty());
-
-        // act
-        MvcResult response = mockMvc.perform(
-            delete("/api/riderequests/delete/rider?id=10")
-                .with(csrf()))
-            .andExpect(status().isNotFound()).andReturn();
-
-        // assert
-        verify(rideRequestRepository, times(1)).findById(10L);
-        Map<String, Object> json = responseToJson(response);
-        assertEquals("RideRequest with id 10 not found", json.get("message"));
-	  }
-
-    @WithMockUser(roles = { "RIDER" })
-	  @Test
-	  public void rider_edit_unowned() throws Exception {
+	@Test
+	public void rider_edit_unowned() throws Exception {
         // arrange
 
         RideRequest r1 = RideRequest.builder()
@@ -322,7 +355,8 @@ public class RideRequestControllerTests extends ControllerTestCase {
             .room("3525")
             .pickupLocation("asap")
             .build();
-          RideRequest r2 = RideRequest.builder()
+
+        RideRequest r2 = RideRequest.builder()
             .riderId(2L)
             .day("Tuesday")
             .course("ART 2")
@@ -346,32 +380,6 @@ public class RideRequestControllerTests extends ControllerTestCase {
                 .content(requestBody)
                 .with(csrf()))
             .andExpect(status().is(403));
-	  }
-
-    @WithMockUser(roles = { "RIDER" })
-	  @Test
-	  public void rider_delete_unowned_request()
-        throws Exception {
-        // arrange
-
-        RideRequest r2 = RideRequest.builder()
-            .riderId(2L)
-            .day("Monday")
-            .course("ART 1")
-            .startTime("12AM")
-            .stopTime("12AM")
-            .building("Phelps")
-            .room("3525")
-            .pickupLocation("asap")
-            .build();
-        User u1 = User.builder().id(1L).build();
-        when(rideRequestRepository.findById(eq(10L))).thenReturn(Optional.of(r2));
-
-        // act
-        mockMvc.perform(
-            delete("/api/riderequests/delete/rider?id=10")
-                .with(csrf()))
-            .andExpect(status().is(403));
-	  }
+	}
 
 }

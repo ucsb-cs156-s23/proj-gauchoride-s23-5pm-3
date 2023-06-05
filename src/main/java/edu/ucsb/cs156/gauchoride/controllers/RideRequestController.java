@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiParam;
 
 import javax.validation.Valid;
 
-@Api(description = "Ride request information (admin, driver, rider)")
+@Api(description = "Ride request information")
 @RequestMapping("/api/riderequests")
 @RestController
 public class RideRequestController extends ApiController {
@@ -37,6 +37,36 @@ public class RideRequestController extends ApiController {
 
     @Autowired
     ObjectMapper mapper;
+
+    @ApiOperation(value = "Delete a ride request (admin)")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/delete")
+    public Object deleteRideRequest_Admin(
+        @ApiParam("id") @RequestParam Long id) {
+            RideRequest rideRequest = rideRequestRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(RideRequest.class, id));
+
+        rideRequestRepository.delete(rideRequest);
+
+        return genericMessage("Ride request with id %s deleted".formatted(id));
+    }
+
+    @ApiOperation(value = "Delete a ride request (rider)")
+    @PreAuthorize("hasRole('ROLE_RIDER')")
+    @DeleteMapping("/delete/rider")
+    public Object deleteRideRequest_Rider(
+        @ApiParam("id") @RequestParam Long id) {
+            RideRequest rideRequest = rideRequestRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(RideRequest.class, id));
+
+        Long userId = getCurrentUser().getUser().getId();
+        if(userId == rideRequest.getRiderId()){
+            rideRequestRepository.delete(rideRequest);
+            return genericMessage("Ride request with id %s deleted".formatted(id));
+        }else{
+            throw new AccessDeniedException("403 returned"); 
+        }
+    }
 
     @ApiOperation(value = "Update a ride request (admin)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -61,7 +91,7 @@ public class RideRequestController extends ApiController {
         return rideRequest;
     }
 
-	@ApiOperation(value = "Update a ride request (rider)")
+	  @ApiOperation(value = "Update a ride request (rider)")
     @PreAuthorize("hasRole('ROLE_RIDER')")
     @PutMapping("/put/rider")
     public RideRequest updateRideRequest_Rider(
@@ -88,6 +118,5 @@ public class RideRequestController extends ApiController {
 		}else{
 			throw new AccessDeniedException("403 returned"); 
 		}
-    }
 
 }

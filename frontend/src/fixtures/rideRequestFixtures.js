@@ -1,52 +1,62 @@
 const rideRequestFixtures = {
     oneRideRequest: {
-        "userid": 1,
+        "id": 1,
         "day": "Monday",
-        "fullName": "Bob John",
         "course": "Math 4A",
         "startTime": "11:00AM",
         "stopTime": "12:15PM",
         "building": "IV Theatre",
         "room": "1",
-        "pickup": "San Rafael Residence Hall Tower"
+        "pickupLocation": "San Rafael Residence Hall Tower",
+        "rider": {
+            "id": 1,
+            "fullName": "Bob John"
+        }
     },
     threeRideRequests: [
         {
-            "userid": 2,
+            "id": 2,
             "day": "Tuesday",
-            "fullName": "Tim Smith",
             "course": "ANTH 2",
             "startTime": "8:00AM",
             "stopTime": "9:15PM",
             "building": "Music",
             "room": "LLCH",
-            "pickup": "Lot 3"
+            "pickupLocation": "Lot 3",
+            "rider": {
+                "id": 2,
+                "fullName": "Tim Smith"
+            }
         },
         {
-            "userid": 3,
+            "id": 3,
             "day": "Wednesday",
-            "fullName": "Peter Parker",
             "course": "CHEM 1B",
             "startTime": "9:30AM",
             "stopTime": "10:45PM",
             "building": "Chemistry",
             "room": "1179",
-            "pickup": "Anacapa Residence Hall"
+            "pickupLocation": "Anacapa Residence Hall",
+            "rider": {
+                "id": 3,
+                "fullName": "Peter Parker"
+            }
         },
         {
-            "userid": 4,
+            "id": 4,
             "day": "Thursday",
-            "fullName": "Lisa Simpson",
             "course": "ENGL 23",
             "startTime": "9:30AM",
             "stopTime": "10:45PM",
             "building": "Campbell Hall",
             "room": "",
-            "pickup": "Lot 1"
+            "pickupLocation": "Lot 1",
+            "rider": {
+                "id": 4,
+                "fullName": "Lisa Simpson"
+            }
         }
     ]
+};
 
-
-}
-
-export default rideRequestFixtures
+export default rideRequestFixtures;

@@ -13,7 +13,7 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
     } = useForm(
         { defaultValues: initialRideRequest || {}, }
     );
-    // Stryker enable all
+    // Stryker restore all
 
     const navigate = useNavigate();
 

@@ -24,13 +24,13 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
             {initialRideRequest && (
                 <>
                     <Form.Group className="mb-3" >
-                        <Form.Label htmlFor="userid">User ID</Form.Label>
+                        <Form.Label htmlFor="id">ID</Form.Label>
                         <Form.Control
-                            data-testid="RideRequestForm-userid"
-                            id="userid"
+                            data-testid="RideRequestForm-id"
+                            id="id"
                             type="text"
-                            {...register("userid")}
-                            value={initialRideRequest.userid}
+                            {...register("id")}
+                            value={initialRideRequest.id}
                             disabled
                         />
                     </Form.Group>
@@ -41,13 +41,10 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
                             id="fullName"
                             type="text"
                             isInvalid={Boolean(errors.fullName)}
-                            {...register("fullName", {
-                                required: "Full Name is required."
-                            })}
+                            {...register("fullName")}
+                            value={initialRideRequest.rider.fullName}
+                            disabled
                         />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.fullName?.message}
-                        </Form.Control.Feedback>
                     </Form.Group>
                 </>
             )}
@@ -145,18 +142,18 @@ function RideRequestForm({ initialRideRequest, submitAction, buttonLabel = "Crea
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label htmlFor="pickup">Pickup Location</Form.Label>
+                <Form.Label htmlFor="pickupLocation">Pickup Location</Form.Label>
                 <Form.Control
-                    data-testid="RideRequestForm-pickup"
-                    id="pickup"
+                    data-testid="RideRequestForm-pickupLocation"
+                    id="pickupLocation"
                     type="text"
-                    isInvalid={Boolean(errors.pickup)}
-                    {...register("pickup", {
+                    isInvalid={Boolean(errors.pickupLocation)}
+                    {...register("pickupLocation", {
                         required: "Pickup Location is required."
                     })}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {errors.pickup?.message}
+                    {errors.pickupLocation?.message}
                 </Form.Control.Feedback>
             </Form.Group>
 

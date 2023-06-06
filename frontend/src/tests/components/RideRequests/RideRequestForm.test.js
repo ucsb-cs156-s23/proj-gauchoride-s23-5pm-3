@@ -32,8 +32,8 @@ describe("RideRequestForm tests", () => {
                 <RideRequestForm initialRideRequest={rideRequestFixtures.oneRideRequest} />
             </Router>
         );
-        await findByTestId(/RideRequestForm-userid/);
-        expect(getByText(/User ID/)).toBeInTheDocument();
+        await findByTestId(/RideRequestForm-id/);
+        expect(getByText(/ID/)).toBeInTheDocument();
     });
 
     test("Correct Error messsages on missing input", async () => {
@@ -76,7 +76,7 @@ describe("RideRequestForm tests", () => {
         const stopTimeField = getByTestId("RideRequestForm-stopTime");
         const buildingField = getByTestId("RideRequestForm-building");
         const roomField = getByTestId("RideRequestForm-room");
-        const pickupField = getByTestId("RideRequestForm-pickup");
+        const pickupField = getByTestId("RideRequestForm-pickupLocation");
         const submitButton = getByTestId("RideRequestForm-submit");
 
         fireEvent.change(dayField, { target: { value: 'z' } })

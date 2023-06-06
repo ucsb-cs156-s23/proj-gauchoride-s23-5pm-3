@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.AccessLevel;
-
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,6 +37,7 @@ public class User {
   private String hostedDomain;
   private boolean admin;
   private boolean driver;
+  private boolean rider;
 
   @OneToMany(mappedBy="driver", fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @JsonIgnore

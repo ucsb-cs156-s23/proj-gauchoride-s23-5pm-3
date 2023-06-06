@@ -38,7 +38,7 @@ public class AdminInterceptors implements HandlerInterceptor {
     public AdminInterceptors(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    //The idea for this login bug I got referenced from Zack Miller from Group 4
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

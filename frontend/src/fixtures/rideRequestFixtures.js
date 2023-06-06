@@ -49,7 +49,7 @@ const rideRequestFixtures = {
             "startTime": "9:30AM",
             "stopTime": "10:45PM",
             "building": "Campbell Hall",
-            "room": "",
+            "room": "1",
             "pickupLocation": "Lot 1",
             "rider": {
                 "id": 4,

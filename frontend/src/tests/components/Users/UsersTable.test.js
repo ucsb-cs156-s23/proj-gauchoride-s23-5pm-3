@@ -51,6 +51,21 @@ describe("UserTable tests", () => {
         expect(getByTestId(`${testId}-cell-row-1-col-admin`)).toHaveTextContent("false");
         expect(getByTestId(`${testId}-cell-row-1-col-driver`)).toHaveTextContent("true");
 
+        
+
+      });
+
+      test("ButtonColumn should have type primary", () => {
+        const {getAllByRole} = render(
+            <QueryClientProvider client={queryClient}>
+                <UsersTable users={usersFixtures.threeUsers}/>
+            </QueryClientProvider>
+        );  
+
+        // should cover the mutation tests for all buttons having the string "primary"
+        const buttons = getAllByRole("button");
+        buttons.forEach( (button) =>  {
+            expect(button).toHaveClass("btn btn-primary");
+        });
       });
 });
-

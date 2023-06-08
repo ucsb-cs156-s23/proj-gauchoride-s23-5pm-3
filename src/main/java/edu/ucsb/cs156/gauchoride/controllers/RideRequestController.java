@@ -68,4 +68,55 @@ public class RideRequestController extends ApiController {
         }
     }
 
+    @ApiOperation(value = "Update a ride request (admin)")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/put")
+    public RideRequest updateRideRequest_Admin(
+            @ApiParam("id") @RequestParam Long id,
+            @RequestBody @Valid RideRequest incoming) {
+
+        RideRequest rideRequest = rideRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RideRequest.class, id));
+
+        rideRequest.setDay(incoming.getDay());
+        rideRequest.setCourse(incoming.getCourse());
+        rideRequest.setStartTime(incoming.getStartTime());
+        rideRequest.setStopTime(incoming.getStopTime());
+        rideRequest.setBuilding(incoming.getBuilding());
+        rideRequest.setRoom(incoming.getRoom());
+        rideRequest.setPickupLocation(incoming.getPickupLocation());
+
+        rideRequestRepository.save(rideRequest);
+
+        return rideRequest;
+    }
+
+	@ApiOperation(value = "Update a ride request (rider)")
+    @PreAuthorize("hasRole('ROLE_RIDER')")
+    @PutMapping("/put/rider")
+    public RideRequest updateRideRequest_Rider(
+        @ApiParam("id") @RequestParam Long id,
+        @RequestBody @Valid RideRequest incoming) {
+
+		Long userId = getCurrentUser().getUser().getId();
+
+        RideRequest rideRequest = rideRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RideRequest.class, id));
+
+		if(userId == rideRequest.getRiderId()){
+			rideRequest.setDay(incoming.getDay());
+			rideRequest.setCourse(incoming.getCourse());
+			rideRequest.setStartTime(incoming.getStartTime());
+			rideRequest.setStopTime(incoming.getStopTime());
+			rideRequest.setBuilding(incoming.getBuilding());
+			rideRequest.setRoom(incoming.getRoom());
+			rideRequest.setPickupLocation(incoming.getPickupLocation());
+
+			rideRequestRepository.save(rideRequest);
+
+			return rideRequest;
+		}else{
+			throw new AccessDeniedException("403 returned"); 
+		}
+    }
 }

@@ -173,4 +173,213 @@ public class RideRequestControllerTests extends ControllerTestCase {
             .andExpect(status().is(403));
 	}
 
+    @WithMockUser(roles = { "ADMIN" })
+	@Test
+	public void admin_edit() throws Exception {
+        // arrange
+
+        RideRequest r1 = RideRequest.builder()
+            .riderId(1L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+
+        RideRequest r2 = RideRequest.builder()
+            .riderId(1L)
+            .day("Tuesday")
+            .course("ART 2")
+            .startTime("1AM")
+            .stopTime("1AM")
+            .building("Girvetz")
+            .room("1004")
+            .pickupLocation("ASAP")
+            .build();
+
+        String requestBody = mapper.writeValueAsString(r2);
+
+        when(rideRequestRepository.findById(eq(4L))).thenReturn(Optional.of(r1));
+
+        // act
+        MvcResult response = mockMvc.perform(
+            put("/api/riderequests/put?id=4")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(4L);
+        verify(rideRequestRepository, times(1)).save(r2); // should be saved with updated info
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(requestBody, responseString);
+	}
+
+	@WithMockUser(roles = { "ADMIN" })
+	@Test
+	public void admin_edit_does_not_exist() throws Exception {
+        // arrange
+
+        RideRequest r2 = RideRequest.builder()
+            .riderId(1L)
+            .day("Tuesday")
+            .course("ART 2")
+            .startTime("1AM")
+            .stopTime("1AM")
+            .building("Girvetz")
+            .room("1004")
+            .pickupLocation("ASAP")
+            .build();
+        String requestBody = mapper.writeValueAsString(r2);
+
+        when(rideRequestRepository.findById(eq(5L))).thenReturn(Optional.empty());
+
+        // act
+        MvcResult response = mockMvc.perform(
+            put("/api/riderequests/put?id=5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(5L);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("RideRequest with id 5 not found", json.get("message"));
+
+	}
+
+    @WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_edit() throws Exception {
+        // arrange
+
+        RideRequest r1 = RideRequest.builder()
+            .riderId(1L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+
+        RideRequest r2 = RideRequest.builder()
+            .riderId(1L)
+            .day("Tuesday")
+            .course("ART 2")
+            .startTime("1AM")
+            .stopTime("1AM")
+            .building("Girvetz")
+            .room("1004")
+            .pickupLocation("ASAP")
+            .build();
+
+        User u1 = User.builder().id(1L).build();
+        String requestBody = mapper.writeValueAsString(r2);
+
+        when(rideRequestRepository.findById(eq(4L))).thenReturn(Optional.of(r1));
+
+        // act
+        MvcResult response = mockMvc.perform(
+            put("/api/riderequests/put/rider?id=4")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(4L);
+        verify(rideRequestRepository, times(1)).save(r2); // should be saved with updated info
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(requestBody, responseString);
+	}
+
+	@WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_edit_does_not_exist() throws Exception {
+        // arrange
+
+        RideRequest r2 = RideRequest.builder()
+            .riderId(1L)
+            .day("Tuesday")
+            .course("ART 2")
+            .startTime("1AM")
+            .stopTime("1AM")
+            .building("Girvetz")
+            .room("1004")
+            .pickupLocation("ASAP")
+            .build();
+
+        User u1 = User.builder().id(1L).build();
+        String requestBody = mapper.writeValueAsString(r2);
+
+        when(rideRequestRepository.findById(eq(5L))).thenReturn(Optional.empty());
+
+        // act
+        MvcResult response = mockMvc.perform(
+            put("/api/riderequests/put/rider?id=5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        // assert
+        verify(rideRequestRepository, times(1)).findById(5L);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("RideRequest with id 5 not found", json.get("message"));
+
+	}
+
+    @WithMockUser(roles = { "RIDER" })
+	@Test
+	public void rider_edit_unowned() throws Exception {
+        // arrange
+
+        RideRequest r1 = RideRequest.builder()
+            .riderId(2L)
+            .day("Monday")
+            .course("ART 1")
+            .startTime("12AM")
+            .stopTime("12AM")
+            .building("Phelps")
+            .room("3525")
+            .pickupLocation("asap")
+            .build();
+
+        RideRequest r2 = RideRequest.builder()
+            .riderId(2L)
+            .day("Tuesday")
+            .course("ART 2")
+            .startTime("1AM")
+            .stopTime("1AM")
+            .building("Girvetz")
+            .room("1004")
+            .pickupLocation("ASAP")
+            .build();
+
+        User u1 = User.builder().id(1L).build();
+        String requestBody = mapper.writeValueAsString(r2);
+
+        when(rideRequestRepository.findById(eq(4L))).thenReturn(Optional.of(r1));
+
+        // act
+        mockMvc.perform(
+            put("/api/riderequests/put/rider?id=4")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+            .andExpect(status().is(403));
+	}
+
 }

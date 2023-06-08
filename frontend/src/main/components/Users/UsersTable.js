@@ -39,10 +39,12 @@ export default function UsersTable({ users}) {
 
     );
 
-    // Stryker restore all 
+   // Stryker restore all 
+
     const toggleAdminCallback = async (cell) => { toggleAdminMutation.mutate(cell); }
     const toggleDriverCallback = async (cell) => { toggleDriverMutation.mutate(cell); }
 
+    
 
     const columns = [
         {
@@ -76,6 +78,7 @@ export default function UsersTable({ users}) {
     const buttonColumn = [
         // shows all the text columns, and then the button columns
         ...columns,
+
         ButtonColumn("toggle-admin", "primary", toggleAdminCallback, "UsersTable"),
         ButtonColumn("toggle-driver", "primary", toggleDriverCallback, "UsersTable"),
     ]   
